@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QJSonArray>
-#include <vector>
+#include <forward_list>
 #include <qfileinfo.h>
 
 struct FileInfo
@@ -25,7 +25,7 @@ struct FileInfo
 	QString name;
 	bool dir;
 	int size;
-	int index
+	int index;
 };
 
 
@@ -35,16 +35,18 @@ public:
 	static const QString delim;
 	FileInfo finfo;
 	FileTree *parent;
-	std::vector<FileTree*> children;
+	std::forward_list<FileTree*> children;
 
 	QString getName();
 	void addChild(FileTree* child);
-	void addFile(FileTree* root, const QString &fullPath);
-	void addDirectory(FileTree* root, const QString &fullPath);
+	void addFile(const QString &realPath, const QString &fullPath);
+	void addDirectory(const QString &dirName, const QString &fullPath);
 	FileTree(FileInfo _finfo, FileTree* parent);
 	~FileTree(void);
 private:
-	void addFileIt(FileTree* root, const FileInfo &finfo, const QList<QString>::iterator &begin, const QList<QString>::iterator &end);
+	void addFileIt(const FileInfo &finfo,
+                   const QList<QString>::iterator &begin,
+                   const QList<QString>::iterator &end);
 	
 };
 
