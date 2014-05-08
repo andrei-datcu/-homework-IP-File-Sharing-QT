@@ -1,5 +1,8 @@
 *.*sdf
 *.sln
 *.vcx*
-*.v11.
+*.v11.*
 *main.cpp
+GeneratedFiles/
+x64/
+Debug/
