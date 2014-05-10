@@ -1,6 +1,7 @@
 #include "FileTree.h"
 #include <qstringlist.h>
-#include <QList>
+#include <vector>
+#include <algorithm>
 
 const QString FileTree::delim = "/";
 int FileInfo::total = 0;
@@ -14,7 +15,11 @@ FileTree::FileTree(FileInfo finfo, FileTree* parent) :
 }
 
 void FileTree::addChild(FileTree *child) {
-    children.push_front(child);
+    children.push_back(child);
+}
+
+FileTree* FileTree::childAt(int index){
+    return children.at(index);
 }
 
 void FileTree::addFileIt(const FileInfo &finfo,
@@ -55,4 +60,44 @@ QString FileTree::getName() {
 FileTree::~FileTree(void){
     for (FileTree* ch : children)
         delete ch;
+}
+
+int FileTree::childCount() const{
+
+    return children.size();
+}
+
+int FileTree::myIndexInParentList() const{
+
+    //Daca am parinte returneaza al catelea dintre copii lui sunt
+
+    if (parent){
+        int index;
+        for (index = 0; index < parent->children.size(); ++index)
+            if (parent->children[index] == this)
+                return index;
+    }
+
+    return -1;
+}
+
+FileTree* FileTree::getTreeIt(const QList<QString>::iterator &begin,
+                              const QList<QString>::iterator &end){
+
+    if (begin == end)
+        return this; //chiar eu sunt
+
+    for (FileTree *c : children)
+        if (c->finfo.name == *begin)
+            return getTreeIt(begin + 1, end);
+
+    //Daca ajung aici inseamna ca n-am gasit nimic
+    return NULL;
+}
+
+FileTree* FileTree::getTreeFromPath(const QString &path){
+    /* Functie care primeste un path (in sistemul de fisiere VIRTUAL */
+
+    QStringList list = path.split(delim, QString::SkipEmptyParts);
+    return getTreeIt(list.begin(), list.end());
 }
