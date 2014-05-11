@@ -2,7 +2,7 @@
 *.sln
 *.vcx*
 *.v11.*
-*main.cpp
+main.cpp
 GeneratedFiles/
 x64/
 Debug/
