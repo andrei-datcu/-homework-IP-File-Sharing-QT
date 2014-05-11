@@ -2,6 +2,7 @@
 #include <qstringlist.h>
 #include <vector>
 #include <algorithm>
+#include <qjsonarray.h>
 
 const QString FileTree::delim = "/";
 int FileInfo::total = 0;
@@ -38,11 +39,13 @@ void FileTree::addFileIt(const FileInfo &finfo,
 
 }
 
-void FileTree::addFile(const QString &realPath,
+int FileTree::addFile(const QString &realPath,
                        const QString &fullPath) {
     QStringList list = fullPath.split(delim, QString::SkipEmptyParts);
     FileInfo fi(realPath);
     addFileIt(fi, list.begin(), list.end());
+    
+    return fi.index;
 }
 
 void FileTree::addDirectory(const QString &dirName,
@@ -73,11 +76,11 @@ int FileTree::myIndexInParentList() const{
 
     if (parent){
         int index;
-        for (index = 0; index < parent->children.size(); ++index)
+        for (index = 0; index < parent->children.size(); ++index){
             if (parent->children[index] == this)
                 return index;
+        }
     }
-
     return -1;
 }
 
@@ -100,4 +103,40 @@ FileTree* FileTree::getTreeFromPath(const QString &path){
 
     QStringList list = path.split(delim, QString::SkipEmptyParts);
     return getTreeIt(list.begin(), list.end());
+}
+
+void FileTree::removeTree(){
+
+    for (auto it = this->parent->children.begin();
+            it < this->parent->children.end(); ++it){
+                if (*it == this){
+                    parent->children.erase(it);
+                    return;
+                }
+    }
+}
+
+QJsonObject FileTree::toJson(){
+
+    QJsonObject result;
+    QJsonArray cJson;
+
+    result["info"] = finfo.toJson();
+
+    for (FileTree* c : children)
+        cJson.append(c->toJson());
+
+    result["children"] = cJson;
+    return result;
+}
+
+
+FileTree::FileTree(const QJsonObject &json, FileTree *parent):
+        finfo(json["info"].toObject()){
+
+    this->parent = parent;
+    QJsonArray cJson = json["children"].toArray();
+
+    for (const QJsonValue &v : cJson)
+        this->addChild(new FileTree(v.toObject(), this));
 }

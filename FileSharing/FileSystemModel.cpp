@@ -10,8 +10,7 @@
 QFileIconProvider FileSystemModel::iconProvider;
 
 FileSystemModel::FileSystemModel(FileTree *root, QObject* parent)
-    : QAbstractItemModel(parent), mIconFactory(new QFileIconProvider()),
-    mRootItem(root), mCurrentItem(root){
+    : QAbstractItemModel(parent), mRootItem(root), mCurrentItem(root){
         // Now it is time to fix the headers
         mHeaders << "Name"
             << "Size"
@@ -21,10 +20,11 @@ FileSystemModel::FileSystemModel(FileTree *root, QObject* parent)
 }
 
 FileSystemModel::~FileSystemModel(){
-    delete mIconFactory;
 }
 
 QVariant FileSystemModel::headerData(int section, Qt::Orientation orientation, int role) const{
+
+    Qt::Alignment flag;
 
     if(orientation == Qt::Horizontal){
         switch(role){
@@ -35,7 +35,8 @@ QVariant FileSystemModel::headerData(int section, Qt::Orientation orientation, i
             // in case of TextAlignmentRole, only SIZE column will be right align,
             // others will be left align
         case Qt::TextAlignmentRole:
-            return int(SIZE) == section ? Qt::AlignRight : Qt::AlignLeft;
+            flag =  (int(SIZE) == section ? (Qt::AlignRight | Qt::AlignVCenter) : Qt::AlignLeft);
+            return flag;
             break;
         }
     }
@@ -56,6 +57,7 @@ int FileSystemModel::columnCount(const QModelIndex & /* parent */) const{
 }
 
 int FileSystemModel::rowCount(const QModelIndex &parent) const{
+
     FileTree *parentItem = getItem(parent);
     return parentItem->childCount() + 1;
 }
@@ -129,8 +131,11 @@ QModelIndex FileSystemModel::index(int row, int column, const QModelIndex &paren
     if(parentItem){
         if (row == 0)
             return createIndex(row, column, parentItem);
-        FileTree *childItem = parentItem->childAt(row - 1);
 
+        if (row > parentItem->childCount())
+            return QModelIndex();
+
+        FileTree *childItem = parentItem->childAt(row - 1);
         if (childItem){
             return createIndex(row, column, childItem);
         }
@@ -278,4 +283,8 @@ QString FileSystemModel::typeFromFileInfo(const FileInfo &info){
         return QString(shFileInfo.szTypeName);
     else
         return "";
+}
+
+FileTree* FileSystemModel::currentItem(){
+    return mCurrentItem;
 }

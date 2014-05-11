@@ -34,6 +34,7 @@ public:
     QModelIndex setCurrentItem (FileTree *item);
   
     FileTree *getItem(const QModelIndex &index) const;
+    FileTree *currentItem();
 
 private:
     static QIcon iconFromFileInfo(const FileInfo &info);
@@ -43,7 +44,6 @@ private:
 
     FileTree *mRootItem, *mCurrentItem;
     QStringList mHeaders;
-    QFileIconProvider* mIconFactory;
 };
 
 #endif // FILESYSTEMMODEL_H

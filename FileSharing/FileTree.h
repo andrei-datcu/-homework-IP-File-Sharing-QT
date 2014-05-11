@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QJSonArray>
+#include <qjsonobject.h>
 #include <vector>
 #include <qfileinfo.h>
 
@@ -20,12 +20,30 @@ struct FileInfo
 		index = total++;
 	}
 
+    FileInfo(const QJsonObject &json){
+        name = json["name"].toString();
+        size = json["size"].toInt();
+        dir = json["dir"].toBool();
+        index = json["index"].toInt();
+    }
+
 	QString name;
 	bool dir;
 	int size;
 	int index;
 
-private:
+    QJsonObject toJson(){
+
+        QJsonObject result;
+        result["name"] = name;
+        result["size"] = size;
+        result["dir"] = dir;
+        result["index"] = index;
+
+        return result;
+    }
+
+
     static int total;
 };
 
@@ -34,11 +52,12 @@ class FileTree
 {
 public:
 	static const QString delim;
-	const FileInfo finfo;
+	FileInfo finfo;
 	FileTree *parent;
 	std::vector<FileTree*> children;
 
     FileTree(FileInfo _finfo, FileTree* parent);
+    FileTree(const QJsonObject &object, FileTree *parent);
 	~FileTree(void);
 
 	QString getName();
@@ -47,8 +66,11 @@ public:
     FileTree* childAt(int index);
     FileTree* getTreeFromPath(const QString &path);
 	void addChild(FileTree* child);
-	void addFile(const QString &realPath, const QString &fullPath);
-	void addDirectory(const QString &dirName, const QString &fullPath);
+	int addFile(const QString &realPath, const QString &fullPath="");
+	void addDirectory(const QString &dirName, const QString &fullPath="");
+    void removeTree();
+
+    QJsonObject toJson();
 
 private:
 	void addFileIt(const FileInfo &finfo,
