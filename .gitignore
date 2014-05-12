@@ -8,3 +8,8 @@
 *.aps
 *.rc
 */x64/*
+*.v11.*
+main.cpp
+GeneratedFiles/
+x64/
+Debug/

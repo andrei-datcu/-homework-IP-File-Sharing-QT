@@ -1,0 +1,39 @@
+{
+    "fileIds": [
+        {
+            "fullname": "C:/regie_net.txt",
+            "id": 1
+        }
+    ],
+    "root": {
+        "children": [
+            {
+                "children": [
+                    {
+                        "children": [
+                        ],
+                        "info": {
+                            "dir": false,
+                            "index": 1,
+                            "name": "rnregie_net.txt",
+                            "size": 80
+                        }
+                    }
+                ],
+                "info": {
+                    "dir": true,
+                    "index": 0,
+                    "name": "andrei",
+                    "size": -1
+                }
+            }
+        ],
+        "info": {
+            "dir": false,
+            "index": 0,
+            "name": "",
+            "size": 0
+        }
+    },
+    "totalIndex": 2
+}
