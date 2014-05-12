@@ -3,3 +3,8 @@
 *.vcx*
 *.v11.
 *main.cpp
+*/Debug/*
+*/GeneratedFiles/*
+*.aps
+*.rc
+*/x64/*
