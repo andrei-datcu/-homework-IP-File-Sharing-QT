@@ -35,7 +35,7 @@ void ServerConnectionThread::run()
 	memcpy(&new_client, buffer, sizeof(connectRequest));
 	qDebug() <<"Uite cine a venit: "<< new_client.userName << "#" <<peer.peerAddress().toString() ;
 	
-	//TODO: Lock pe chestia asta
+	//TODO: Lock pe chestia asta si verificare daca user-ul e la noi
 	srv->userList.insert(new_client.userName, peer.peerAddress().toString());
 
 	
