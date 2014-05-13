@@ -24,6 +24,9 @@ void ServerFileThread::run()
 	QTcpSocket peer;
 	peer.setSocketDescriptor(socketDescriptor);
 	peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+	connect(&peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
+
+
 	if (!peer.waitForReadyRead(6000))
             qDebug("Failed to receive message from client") ;
         else
@@ -46,13 +49,18 @@ void ServerFileThread::run()
 	}
 	new_request.size = data.size();
 	filename = file.fileName().toLatin1();
-	memcpy(new_request.payload, filename.data(), sizeof(filename.data()) + 5);
+	strncpy(new_request.payload, filename.data(), strlen(filename.data()));
 	memcpy(buffer, &new_request, sizeof(fileRequest));
 	peer.write(buffer, sizeof(fileRequest));
 
 
 	qDebug()<<"Data: "<<data.size() <<"  " <<new_request.payload;
-	//peer.write(data.size);
-	peer.waitForReadyRead(3000);
+	peer.write(data);
+	peer.waitForReadyRead(5000);
+}
+
+void ServerFileThread::bytesWritten(qint64 bytes)
+{
+	qDebug() << bytes << " bytes written...";
 }
 

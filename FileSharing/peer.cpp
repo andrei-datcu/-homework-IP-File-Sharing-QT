@@ -30,9 +30,10 @@ ShareFileSystem* Peer::getFileList()
 	return s;
 }
 
-void Peer::getFile(int fileID)
+ClientFileThread* Peer::getFile(int fileID)
 {
 	ClientFileThread *thread = new ClientFileThread(this, ipAddress, FILEPORT, fileID);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
+	return thread;
 }

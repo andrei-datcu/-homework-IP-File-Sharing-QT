@@ -17,6 +17,9 @@ public:
 
 	void run();
 
+	public slots:
+		void bytesWritten(qint64 bytes);
+
 private:
 	int socketDescriptor;
 	ShareFileSystem &share;

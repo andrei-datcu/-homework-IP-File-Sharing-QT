@@ -13,3 +13,5 @@ main.cpp
 GeneratedFiles/
 x64/
 Debug/
+*test_*
+*test_send.txt

@@ -15,12 +15,16 @@ public:
 	void run();
 	void doConnect();
 	void getFile();
+	void downloadFile();
 
 	public slots:
-		void readyRead();
+		//void readyRead();
 		void connected();
 		void disconnected();
 		void bytesWritten(qint64 bytes);
+
+signals:
+		void gotBytes(int bytesNumber);
 
 private:
 	QString ipAddress;

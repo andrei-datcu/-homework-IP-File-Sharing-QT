@@ -1,7 +1,9 @@
 #ifndef PEER_H
 #define PEER_H
 #include "ShareFileSystem.h"
+#include "clientfilethread.h"
 #include <QObject>
+#include <QThread>
 
 class Peer : public QObject
 {
@@ -14,7 +16,7 @@ public:
 	int portNumber;
 
 	ShareFileSystem* getFileList();
-	void getFile(int fileID);
+	ClientFileThread* getFile(int fileID);
 
 
 
