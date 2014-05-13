@@ -1,12 +1,14 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include "serverwrapper.h"
+
 #include <QObject>
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QMap>
 
-class Server : public QTcpServer
+class Server : public QObject
 {
 	Q_OBJECT
 
@@ -15,12 +17,11 @@ public:
 	~Server();
 	QMap<QString, QString> userList;
 
-protected:
-	void incomingConnection(qintptr socketDescriptor);
+	void startListeningConnectServer();
 
 private:
 	int connectedClients;
-
+	ServerWrapper *connectServer;
 };
 
 #endif // SERVER_H

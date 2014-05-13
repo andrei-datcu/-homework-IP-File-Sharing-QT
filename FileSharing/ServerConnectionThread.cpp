@@ -1,8 +1,8 @@
 #include "ServerConnectionThread.h"
 
-ServerConnectionThread::ServerConnectionThread(QObject *parent, int socketDescriptor)
+ServerConnectionThread::ServerConnectionThread(QObject *parent, int socketDescriptor, QObject *server)
 	: QThread(parent), 
-	parent(parent),
+	server(server),
 	socketDescriptor(socketDescriptor)
 {
 
@@ -15,43 +15,42 @@ ServerConnectionThread::~ServerConnectionThread()
 
 void ServerConnectionThread::run()
 {
-	Username nextClient;
-	UsernameResponse rsp;
+	connectRequest new_client;
+	serverConnectResponse new_response;
 	char buffer[10000];
 
-	Server *srv = (Server*) parent;
+	Server *srv = (Server*) server;
 
 	QTcpSocket peer;
 	peer.setSocketDescriptor(socketDescriptor);
 	peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
-
+	connect(&peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
+	
 	if (!peer.waitForReadyRead(6000))
         qDebug("Failed to receive message with username from client") ;
     else
         qDebug("Reading username from client");
 
-	peer.read(buffer, sizeof(Username));
-	memcpy(&nextClient, buffer, sizeof(Username));
+	peer.read(buffer, sizeof(connectRequest));
+	memcpy(&new_client, buffer, sizeof(connectRequest));
+	qDebug() <<"Uite cine a venit: "<< new_client.userName << "#" <<peer.peerAddress().toString() ;
+	
+	//TODO: Lock pe chestia asta
+	srv->userList.insert(new_client.userName, peer.peerAddress().toString());
 
-	qDebug() << "userName: " << QString(nextClient.userName);
-	qDebug() << "ipAddress: " << QString(nextClient.ipAddress);
+	
+	new_response.valid = 1;
+	new_response.size = sizeof(srv->userList);
+	memcpy(new_response.payload, &(srv->userList), sizeof(srv->userList));
+	memcpy(buffer, &new_response, sizeof(serverConnectResponse));
+	peer.write(buffer, sizeof(serverConnectResponse));
 
-	if (srv->userList.contains(QString(nextClient.userName))) {
-		qDebug("Username already used!");
-		
-		rsp.valid = 0;
-		memcpy(buffer, &rsp, sizeof(UsernameResponse));
-		peer.write(buffer, sizeof(UsernameResponse));
-	} else {
-		srv->userList.insert(QString(nextClient.userName), QString(nextClient.ipAddress));
-		qDebug() << "User " << nextClient.userName << " connected!";
-		
-		rsp.valid = 1;
-		memcpy(rsp.payload, &srv->userList, sizeof(srv->userList));
-		rsp.size = sizeof(srv->userList);
-		qDebug() << rsp.valid << " " << rsp.size;
-		memcpy(buffer, &rsp, sizeof(UsernameResponse));
-		peer.write(buffer, sizeof(UsernameResponse));
-	}
+	qDebug()<< "Ta da" << new_response.size<<srv->userList;
+	peer.waitForReadyRead(3000);
 
+}
+
+void ServerConnectionThread::bytesWritten(qint64 bytes)
+{
+	qDebug() << bytes << " bytes written...";
 }

@@ -5,6 +5,8 @@
 #define FILEPORT 9999
 #define SEARCHPORT 9999
 #define CHUNKSIZE 1000
+#define SERVERIPADDRESS "127.0.0.1"
+#define SERVERPORT 9191
 
 
 
@@ -24,13 +26,12 @@ typedef struct
 
 typedef struct
 {
-	char ipAddress[20];
 	char userName[30];
-} Username;
+} connectRequest;
 
 typedef struct
 {
 	int valid;
 	int size;
 	char payload[1000];
-} UsernameResponse;
+} serverConnectResponse;

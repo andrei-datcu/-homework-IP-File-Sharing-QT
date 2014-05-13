@@ -3,6 +3,7 @@
 #include "fileresolvserver.h"
 #include "fileserver.h"
 #include "ShareFileSystem.h"
+#include "clientconnectserverthread.h"
 
 #include <QObject>
 #include <QTcpSocket>
@@ -18,7 +19,7 @@ public:
 	QTcpSocket *in_socket, *out_socket;
 	void startListeningFilelist();
 	void startListeningFile();
-
+	void connectToServer(QString ipAddress, int portNumber);
 	~User();
 
 private:

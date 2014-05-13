@@ -18,6 +18,13 @@ User::User(QString username, QObject *parent)
 	fileServer = new FileServer(this, *shared);
 }
 
+void User::connectToServer(QString ipAddress, int portNumber)
+{
+	ClientConnectServerThread *thread = new ClientConnectServerThread(this, ipAddress, portNumber, username);
+	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+	thread->start();
+}
+
 void User::startListeningFilelist()
 {
 	if (!fileListServer->listen(QHostAddress::Any, FILELISTPORT))
