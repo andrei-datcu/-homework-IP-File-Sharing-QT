@@ -3,17 +3,19 @@
 #include <qjsonarray.h>
 #include <qjsondocument.h>
 #include <qmessagebox.h>
+#include <QDebug>
+
 
 ShareFileSystem::ShareFileSystem(){
 
     //Just for debugging
-
     root = new FileTree(FileInfo("/", -1, true), NULL);
     root->addDirectory("andrei", "/");
     root->addDirectory("taygun", "/");
     root->addDirectory("documents", "/andrei/");
     root->addDirectory("taydocuments", "/taygun/");
     root->addFile("C:/Users/Andrei/Documents/ip/file-sharing/etapa3.pdf", "/andrei/documents");
+
 }
 
 
@@ -40,6 +42,11 @@ void ShareFileSystem::removeTree(FileTree *t){
 void ShareFileSystem::createFolder(const QString &folderName, FileTree *parent){
 
     new FileTree(FileInfo(folderName, -1, true), parent); 
+}
+
+void ShareFileSystem::getFilePath(int index)
+{
+	//TODO
 }
 
 QByteArray ShareFileSystem::toByteArray(){

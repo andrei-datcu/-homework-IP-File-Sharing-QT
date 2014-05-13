@@ -1,6 +1,8 @@
 #ifndef USER_H
 #define USER_H
 #include "fileresolvserver.h"
+#include "fileserver.h"
+#include "ShareFileSystem.h"
 
 #include <QObject>
 #include <QTcpSocket>
@@ -14,13 +16,15 @@ public:
 	User(QString username, QObject *parent = 0);
 	QString username;
 	QTcpSocket *in_socket, *out_socket;
-	void startListening();
-	void makeRequest();
+	void startListeningFilelist();
+	void startListeningFile();
 
 	~User();
 
 private:
-	FileResolvServer server;
+	FileResolvServer *fileListServer;
+	FileServer *fileServer;
+	ShareFileSystem *shared;
 	int numberIn;
 	
 };

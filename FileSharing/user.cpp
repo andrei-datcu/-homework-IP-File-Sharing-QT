@@ -7,18 +7,30 @@
 
 #include <QDebug>
 
+
+
 User::User(QString username, QObject *parent)
 	: QObject(parent),
-	  username(username),
-	  server(this)
+	  username(username)
 {
-
-
+	shared = new ShareFileSystem(QString(TESTFILE));
+	fileListServer = new FileResolvServer(this, *shared);
+	fileServer = new FileServer(this, *shared);
 }
 
-void User::startListening()
+void User::startListeningFilelist()
 {
-	if (!server.listen(QHostAddress::Any, 8888))
+	if (!fileListServer->listen(QHostAddress::Any, FILELISTPORT))
+	{
+		qDebug()<<"Serverul nu asculta";
+	}
+	else
+		qDebug()<<"Serverul asculta\n";
+}
+
+void User::startListeningFile()
+{
+	if (!fileServer->listen(QHostAddress::Any, FILEPORT))
 	{
 		qDebug()<<"Serverul nu asculta";
 	}
@@ -27,19 +39,12 @@ void User::startListening()
 }
 
 
-void User::makeRequest()
-{
-	RequestThreadClient *thread = new RequestThreadClient(this);
-	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-	thread->start();
-
-}
-
-
 User::~User()
 {
-	server.close();
+	shared->saveToFile(TESTFILE);
+
+	fileListServer->close();
 	free(in_socket);
 	free(out_socket);
-
+	free(shared);
 }

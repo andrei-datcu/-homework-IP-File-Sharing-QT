@@ -5,8 +5,10 @@
 
 #include <QTcpSocket>
 
-RequestThread::RequestThread(QObject *parent, int socketDescriptor)
-	: QThread(parent), socketDescriptor(socketDescriptor)
+RequestThread::RequestThread(QObject *parent, int socketDescriptor, ShareFileSystem &share)
+	: QThread(parent), 
+	socketDescriptor(socketDescriptor),
+	share(share)
 {
 }
 
@@ -28,7 +30,7 @@ void RequestThread::run()
 	
 	peer.read(buffer, peer.bytesAvailable());
 	qDebug()<<buffer;
-	peer.write("sdasdasdas");
+	peer.write(share.toByteArray());
 	peer.waitForDisconnected(3000);
 }
 

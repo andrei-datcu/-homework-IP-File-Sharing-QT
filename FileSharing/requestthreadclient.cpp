@@ -2,22 +2,43 @@
 
 
 RequestThreadClient::RequestThreadClient(QObject *parent)
-	:QThread(parent)
+	:QThread(parent),
+	share(NULL)
+{
+}
+
+RequestThreadClient::RequestThreadClient(QObject *parent, QString ipAddress, int portNumber, int type, ShareFileSystem **share)
+	:QThread(parent),
+	ipAddress(ipAddress),
+	portNumber(portNumber),
+	type(type),
+	share(share)
 {
 
 }
 
 
+
 RequestThreadClient::~RequestThreadClient(void)
 {
-	//free(peer);
 }
 
 void RequestThreadClient::run()
 {
 	peer = new QTcpSocket();
 	doConnect();
-	makeRequest();
+	switch(type)
+	{
+	case 0:
+		getFileList();
+		break;
+	
+	case 1:
+		break;
+	default:
+		break;
+	}
+	//makeRequest();
 	peer->waitForReadyRead(5000);
 }
 
@@ -25,6 +46,12 @@ void RequestThreadClient::run()
 void RequestThreadClient::makeRequest()
 {
 	peer->write("Taygun biatch", 20);
+}
+
+void RequestThreadClient::getFileList()
+{
+	QString buffer("Filelist");
+	peer->write("Filelist", 8);
 }
 
 void RequestThreadClient::doConnect()
@@ -36,7 +63,7 @@ void RequestThreadClient::doConnect()
 	connect(peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 	connect(peer, SIGNAL(readyRead()), this, SLOT(readyRead()));
 
-	peer->connectToHost("127.0.0.1", 8888);
+	peer->connectToHost(ipAddress, portNumber);
 	if (!peer->waitForConnected(5000))
 		qDebug()<<"Error at Connecting...";
 
@@ -44,7 +71,7 @@ void RequestThreadClient::doConnect()
 
 void RequestThreadClient::readyRead()
 {
-	char buffer[1000];
+	char buffer[5000];
 	peer->read(buffer, peer->bytesAvailable());
 	qDebug() << "Client" << buffer;
 }

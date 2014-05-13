@@ -1,5 +1,6 @@
 #pragma once
 #include "qthread.h"
+#include "ShareFileSystem.h"
 #include <QObject>
 #include <QTcpSocket>
 #include <QThread>
@@ -11,11 +12,17 @@ class RequestThreadClient : public QThread
 
 public:
 	RequestThreadClient(QObject *parent);
+	RequestThreadClient(QObject *parent, QString ipAddress, int portNumber, int type, ShareFileSystem **share);
 	~RequestThreadClient(void);
+
+	QString ipAddress;
+	int portNumber;
+	int type;
 
 	void run();
 	void doConnect();
 	void makeRequest();
+	void getFileList();
 
 	public slots:
 		void readyRead();
@@ -27,5 +34,6 @@ public:
 private:
 	int socketDescriptor;
 	QTcpSocket *peer;
+	ShareFileSystem **share;
 };
 

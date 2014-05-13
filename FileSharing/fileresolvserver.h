@@ -1,6 +1,8 @@
 #ifndef FILERESOLVSERVER_H
 #define FILERESOLVSERVER_H
 
+#include "ShareFileSystem.h"
+
 #include <QTcpServer>
 
 class FileResolvServer : public QTcpServer
@@ -8,7 +10,7 @@ class FileResolvServer : public QTcpServer
 	Q_OBJECT
 
 public:
-	FileResolvServer(QObject *parent);
+	FileResolvServer(QObject *parent, ShareFileSystem &share);
 	~FileResolvServer();
 
 
@@ -17,6 +19,8 @@ protected:
 
 private:
 	int connectedClients;
+	ShareFileSystem &share;
+
 	
 };
 

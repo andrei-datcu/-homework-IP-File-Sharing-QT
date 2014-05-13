@@ -16,6 +16,7 @@ public:
     void addFile(const QString &realFullPath, FileTree *directory);
     void removeTree(FileTree *t);
     void createFolder(const QString &folderName, FileTree *parent);
+	void getFilePath(int index);
 
     void saveToFile(const QString &fileName);
     QByteArray toByteArray();
