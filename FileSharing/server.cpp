@@ -1,34 +1,23 @@
 #include "server.h"
+#include "ServerConnectionThread.h"
 
 Server::Server(QObject *parent)
-	: QObject(parent)
+	: QTcpServer(parent)
 {
-
-	connect(&server, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
-	if (!server.listen(QHostAddress::Any, 8888))
-	{
-		qDebug()<<"Asd";
-
-	}else qDebug() <<"Ascult!!!\n";
+	connectedClients = 0;
 }
 
-void Server::acceptConnection()
-{
-	client = server.nextPendingConnection();
-	connect(client, SIGNAL(readyRead()), this, SLOT(startRead()));
-	qDebug()<<"Asd";
-}
-
-void Server::startRead()
-{
-	char buffer[1024] = {0};
-	client->read(buffer, client->bytesAvailable());
-	qDebug()<<"Received " << endl << buffer<< endl << "disconnected...";
-	client->close();
-	
-}
 
 Server::~Server()
 {
-	server.close();
+
+}
+
+void Server::incomingConnection(qintptr socketDescriptor)
+{
+	ServerConnectionThread *thread = new ServerConnectionThread(this, socketDescriptor);
+	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+	connectedClients++;
+	qDebug("new thread...");
+	thread->start();
 }

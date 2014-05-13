@@ -3,6 +3,14 @@
         {
             "fullname": "C:/regie_net.txt",
             "id": 1
+        },
+        {
+            "fullname": "C:/bdlog.txt",
+            "id": 3
+        },
+        {
+            "fullname": "C:/Documents and Settings/Owner/Documents/GitHub/Lupii/ip-file-sharing-behind-nat/Specs.pdf",
+            "id": 4
         }
     ],
     "root": {
@@ -26,6 +34,16 @@
                     "name": "andrei",
                     "size": -1
                 }
+            },
+            {
+                "children": [
+                ],
+                "info": {
+                    "dir": false,
+                    "index": 4,
+                    "name": "Specs.pdf",
+                    "size": 869253
+                }
             }
         ],
         "info": {
@@ -35,5 +53,5 @@
             "size": 0
         }
     },
-    "totalIndex": 2
+    "totalIndex": 5
 }

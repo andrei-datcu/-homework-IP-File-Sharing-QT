@@ -22,3 +22,15 @@ typedef struct
 	char payload[30];
 } fileRequest;
 
+typedef struct
+{
+	char ipAddress[20];
+	char userName[30];
+} Username;
+
+typedef struct
+{
+	int valid;
+	int size;
+	char payload[1000];
+} UsernameResponse;

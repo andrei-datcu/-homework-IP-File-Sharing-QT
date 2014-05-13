@@ -4,23 +4,23 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QTcpServer>
+#include <QMap>
 
-class Server : public QObject
+class Server : public QTcpServer
 {
 	Q_OBJECT
 
 public:
 	Server(QObject *parent = NULL);
 	~Server();
+	QMap<QString, QString> userList;
 
-	public slots:
-		void acceptConnection();
-		void startRead();
+protected:
+	void incomingConnection(qintptr socketDescriptor);
 
 private:
-	QTcpServer server;
-	QTcpSocket *client;
-	
+	int connectedClients;
+
 };
 
 #endif // SERVER_H
