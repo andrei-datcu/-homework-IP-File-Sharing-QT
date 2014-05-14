@@ -1,9 +1,16 @@
 #include "serverdisconnectthread.h"
 
-ServerDisconnectThread::ServerDisconnectThread(QObject *parent, int socketDescriptor, QObject *server)
+ServerDisconnectThread::ServerDisconnectThread(QObject *parent)
+	: QThread(parent)
+{
+
+}
+
+ServerDisconnectThread::ServerDisconnectThread(QObject *parent, int socketDescriptor, QObject *server, QMutex *lock)
 	: QThread(parent), 
 	server(server),
-	socketDescriptor(socketDescriptor)
+	socketDescriptor(socketDescriptor),
+	lock(lock)
 {
 
 }

@@ -1,9 +1,8 @@
 #ifndef SERVERDISCONNECTWRAPPER_H
 #define SERVERDISCONNECTWRAPPER_H
 
-#include <QObject>
 #include <QTcpServer>
-#include "serverdisconnectthread.h"
+#include <QMutex>
 
 class ServerDisconnectWrapper : public QTcpServer
 {
@@ -11,14 +10,16 @@ class ServerDisconnectWrapper : public QTcpServer
 
 public:
 	ServerDisconnectWrapper(QObject *parent = NULL);
+	ServerDisconnectWrapper(QObject *parent, QMutex *lock);
 	~ServerDisconnectWrapper();
-	
+
+	QMutex *lock;
+
 protected:
 	void incomingConnection(qintptr socketDescriptor);
 
 private:
 	QObject *server;
-	
 };
 
 #endif // SERVERDISCONNECTWRAPPER_H

@@ -11,7 +11,10 @@ class ServerWrapper : public QTcpServer
 
 public:
 	ServerWrapper(QObject *parent = NULL);
+	ServerWrapper(QObject *parent, QMutex *lock);
 	~ServerWrapper();
+
+	QMutex *lock;
 
 protected:
 	void incomingConnection(qintptr socketDescriptor);

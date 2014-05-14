@@ -25,6 +25,13 @@ void User::connectToServer(QString ipAddress, int portNumber)
 	thread->start();
 }
 
+void User::disconnectFromServer(QString ipAddress, int portNumber)
+{
+	ClientDisconnectServerThread *thread = new ClientDisconnectServerThread(this, ipAddress, portNumber, username);
+	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+	thread->start();
+}
+
 void User::startListeningFilelist()
 {
 	if (!fileListServer->listen(QHostAddress::Any, FILELISTPORT))

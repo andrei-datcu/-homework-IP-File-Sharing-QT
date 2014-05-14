@@ -4,9 +4,9 @@ Server::Server(QObject *parent)
 	: QObject(parent)
 {
 	connectedClients = 0;
-	connectServer = new ServerWrapper(this);
-	disconnectServer = new ServerDisconnectWrapper(this); 
-
+	lock = new QMutex();
+	connectServer = new ServerWrapper(this, lock);
+	discServer = new ServerDisconnectWrapper(this, lock);
 }
 
 void Server::startListeningConnectServer()
@@ -17,15 +17,13 @@ void Server::startListeningConnectServer()
 		qDebug()<<"Adevaratul server asculta\n";
 }
 
-
 void Server::startListeningDisconnectServer()
 {
-	if (!disconnectServer->listen(QHostAddress::Any, SERVERPORT + 1))
+	if (!discServer->listen(QHostAddress::Any, SERVERPORT + 1))
 		qDebug()<<"Adevaratul server nu asculta";
 	else
 		qDebug()<<"Adevaratul server asculta\n";
 }
-
 
 Server::~Server()
 {

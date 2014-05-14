@@ -4,6 +4,7 @@
 #include <qstring.h>
 #include "server.h"
 #include "utils.h"
+#include "user.h"
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
@@ -23,7 +24,10 @@ int main(int argc, char *argv[]){
 
 	Server srv;
 	srv.startListeningConnectServer();
-	//srv.startListeningDisconnectServer();
+	srv.startListeningDisconnectServer();
+
+	User myUsr("Tudor");
+	myUsr.connectToServer("127.0.0.1", SERVERPORT);
 
 	
 

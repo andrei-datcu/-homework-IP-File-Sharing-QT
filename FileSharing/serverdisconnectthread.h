@@ -10,10 +10,12 @@ class ServerDisconnectThread : public QThread
 	Q_OBJECT
 
 public:
-	ServerDisconnectThread(QObject *parent, int socketDescriptor, QObject *server);
+	ServerDisconnectThread(QObject *parent = NULL);
+	ServerDisconnectThread(QObject *parent, int socketDescriptor, QObject *server, QMutex *lock);
 	~ServerDisconnectThread();
 
 	void run();
+	QMutex *lock;
 
 public slots:
 	void bytesWritten(qint64 bytes);
@@ -21,7 +23,6 @@ public slots:
 private:
 	int socketDescriptor;
 	QObject *server;
-	
 };
 
 #endif // SERVERDISCONNECTTHREAD_H

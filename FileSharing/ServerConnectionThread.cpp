@@ -1,9 +1,10 @@
 #include "ServerConnectionThread.h"
 
-ServerConnectionThread::ServerConnectionThread(QObject *parent, int socketDescriptor, QObject *server)
+ServerConnectionThread::ServerConnectionThread(QObject *parent, int socketDescriptor, QObject *server, QMutex *lock)
 	: QThread(parent), 
 	server(server),
-	socketDescriptor(socketDescriptor)
+	socketDescriptor(socketDescriptor),
+	lock(lock)
 {
 
 }

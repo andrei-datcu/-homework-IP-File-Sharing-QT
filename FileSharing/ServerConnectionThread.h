@@ -12,13 +12,15 @@ class ServerConnectionThread : public QThread
 	Q_OBJECT
 
 public:
-	ServerConnectionThread(QObject *parent, int socketDescriptor, QObject *server);
+	ServerConnectionThread(QObject *parent, int socketDescriptor, QObject *server, QMutex *lock);
 	~ServerConnectionThread();
 
 	void run();
 
-	public slots:
-		void bytesWritten(qint64 bytes);
+	QMutex *lock;
+
+public slots:
+	void bytesWritten(qint64 bytes);
 
 private:
 	int socketDescriptor;

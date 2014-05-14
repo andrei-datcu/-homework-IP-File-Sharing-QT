@@ -8,6 +8,14 @@ ServerWrapper::ServerWrapper(QObject *parent)
 
 }
 
+ServerWrapper::ServerWrapper(QObject *parent, QMutex *lock)
+	: QTcpServer(parent),
+	server(parent),
+	lock(lock)
+{
+
+}
+
 ServerWrapper::~ServerWrapper()
 {
 
@@ -15,7 +23,7 @@ ServerWrapper::~ServerWrapper()
 
 void ServerWrapper::incomingConnection(qintptr socketDescriptor)
 {
-	ServerConnectionThread *thread = new ServerConnectionThread(this, socketDescriptor, server);
+	ServerConnectionThread *thread = new ServerConnectionThread(this, socketDescriptor, server, lock);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	((Server*)server)->connectedClients++;
 	thread->start();
