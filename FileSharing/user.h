@@ -17,7 +17,6 @@ class User : public QObject
 public:
 	User(QString username, QObject *parent = 0);
 	QString username;
-	QTcpSocket *in_socket, *out_socket;
 	void startListeningFilelist();
 	void startListeningFile();
 	void connectToServer(QString ipAddress, int portNumber);

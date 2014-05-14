@@ -51,12 +51,9 @@ void User::startListeningFile()
 }
 
 
-User::~User()
-{
-	shared->saveToFile(TESTFILE);
+User::~User(){
 
+	shared->saveToFile(TESTFILE);
 	fileListServer->close();
-	free(in_socket);
-	free(out_socket);
 	free(shared);
 }
