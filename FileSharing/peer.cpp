@@ -6,11 +6,10 @@
 
 #define REQ_FILELIST
 
-Peer::Peer(QString username, QString ipAddress, int portNumber, QObject *parent)
+Peer::Peer(QString username, QString ipAddress, QObject *parent)
 	: QObject(parent), 
 	username(username),
-	ipAddress(ipAddress),
-	portNumber(portNumber)
+	ipAddress(ipAddress)
 {
 
 }
