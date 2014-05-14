@@ -26,17 +26,24 @@ MainWindow::MainWindow(QWidget *parent)
         if (ok && !text.isEmpty()){
             Peer *user = new Peer("bla", text);
             activePeers.push_back(user);
-            tabWidget->addTab(new DownloadWidget(*user, progresswidget, this), user->username);
             QProgressDialog *pd = new QProgressDialog(this);
             pd->setRange(0, 0);
             pd->setLabelText("Waiting for user's response...");
 
-            RequestThreadClient *rtc =  user->getFileList();
-            
+            RequestThreadClient *rtc =  user->getFileList();           
             connect(rtc, SIGNAL(finished()), pd, SLOT(close()));
+            pd->exec();
+            tabWidget->addTab(new DownloadWidget(*user, progresswidget, this), user->username);
+
         }
     });
 	menu->addAction(a);
+
+    QAction *a2 = new QAction("Edit your share drive...", this);
+    shareeditorwidget = new ShareDriveEditorWidget(*(myUser.shared), this);
+
+    connect(a2, SIGNAL(triggered()), shareeditorwidget, SLOT(exec()));
+    menu->addAction(a2);
 
     progresswidget = new DownloadsPogressWidget(this);
     tabWidget = new QTabWidget(this);

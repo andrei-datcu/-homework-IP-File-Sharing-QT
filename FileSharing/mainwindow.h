@@ -7,6 +7,7 @@
 #include <vector>
 #include "peer.h"
 #include "downloadspogresswidget.h"
+#include "sharedriveeditorwidget.h"
 #include "user.h"
 
 class MainWindow : public QMainWindow
@@ -22,6 +23,7 @@ private:
     
     QTabWidget *tabWidget;
     DownloadsPogressWidget *progresswidget;
+    ShareDriveEditorWidget *shareeditorwidget;
     std::vector<Peer*> activePeers;
     User myUser;
 };

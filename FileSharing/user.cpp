@@ -16,6 +16,8 @@ User::User(QString username, QObject *parent)
 	shared = new ShareFileSystem(QString(TESTFILE));
 	fileListServer = new FileResolvServer(this, *shared);
 	fileServer = new FileServer(this, *shared);
+    startListeningFilelist();
+    startListeningFile();
 }
 
 void User::connectToServer(QString ipAddress, int portNumber)

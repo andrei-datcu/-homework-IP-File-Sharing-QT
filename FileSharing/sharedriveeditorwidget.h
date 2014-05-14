@@ -1,7 +1,7 @@
 #ifndef SHAREDRIVEEDITORWIDGET_H
 #define SHAREDRIVEEDITORWIDGET_H
 
-#include <QWidget>
+#include <QDialog>
 #include <qpushbutton.h>
 #include <forward_list>
 
@@ -9,7 +9,7 @@
 #include "fileexplorerview.h"
 #include "ShareFileSystem.h"
 
-class ShareDriveEditorWidget : public QWidget
+class ShareDriveEditorWidget : public QDialog
 {
     Q_OBJECT
 

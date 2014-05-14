@@ -61,7 +61,12 @@ void RequestThreadClient::doConnect()
 void RequestThreadClient::readyRead()
 {
 	char buffer[5000];
-	peer->read(buffer, peer->bytesAvailable());
+    QByteArray buff;
+    // TODO!! Pune-l in whileee!!
+	//peer->read(buff, peer->bytesAvailable());
+    buff = peer->readAll();
+
+    *share = new ShareFileSystem(buff);
 	qDebug() << "Client" << buffer;
 }
 

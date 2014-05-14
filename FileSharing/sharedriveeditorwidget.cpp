@@ -7,7 +7,7 @@
 
 ShareDriveEditorWidget::ShareDriveEditorWidget(
     ShareFileSystem &fs,
-    QWidget *parent): fs(fs), QWidget(parent){
+    QWidget *parent): fs(fs){
 
     shareView =  new ShareDriveView(fs, this);
     computerView = new FileExplorerView(this);

@@ -24,10 +24,11 @@ public:
 	void disconnectFromServer(QString ipAddress, int portNumber);
 	~User();
 
+    ShareFileSystem *shared;
+
 private:
 	FileResolvServer *fileListServer;
 	FileServer *fileServer;
-	ShareFileSystem *shared;
 	int numberIn;
 	
 };
