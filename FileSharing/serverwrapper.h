@@ -3,6 +3,7 @@
 
 #include <QTcpServer>
 #include <QMap>
+#include <qobject.h>
 
 class ServerWrapper : public QTcpServer
 {
@@ -11,13 +12,11 @@ class ServerWrapper : public QTcpServer
 public:
 	ServerWrapper(QObject *parent = NULL);
 	~ServerWrapper();
-	QMap<QString, QString> userList;
 
 protected:
 	void incomingConnection(qintptr socketDescriptor);
 
 private:
-	int connectedClients;
 	QObject *server;
 };
 
