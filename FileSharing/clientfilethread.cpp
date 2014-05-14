@@ -72,10 +72,9 @@ void ClientFileThread::downloadFile()
 	qDebug()<<fileSize;
 	while(fileSize > 0)
 	{
-    	//data = peer->read(FAKECHUNKSIZE);
+        peer->waitForReadyRead(-1);
         data = peer->readAll();
 		received = data.count();
-        qDebug () << "Recieved " << received << " bytes\n";
 		sum_received += received;
 		emit gotBytes(sum_received);
 		file.write(data);
