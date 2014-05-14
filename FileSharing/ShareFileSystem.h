@@ -21,6 +21,7 @@ public:
     void saveToFile(const QString &fileName);
     QByteArray toByteArray();
 
+    QString getFileFromId(int id);
 private:
 
     void fillFromBytesArray(const QByteArray &bytes);

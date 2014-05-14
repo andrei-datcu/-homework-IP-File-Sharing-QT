@@ -15,12 +15,10 @@ public:
 	QString username, ipAddress;
 	int portNumber;
 
-	ShareFileSystem* getFileList();
+	RequestThreadClient* getFileList();
 	ClientFileThread* getFile(int fileID);
 
-
-
-private:
+    ShareFileSystem* fs;
 	
 };
 

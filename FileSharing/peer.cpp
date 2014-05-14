@@ -21,13 +21,12 @@ Peer::~Peer()
 }
 
 
-ShareFileSystem* Peer::getFileList()
+RequestThreadClient* Peer::getFileList()
 {
-	ShareFileSystem *s;
-	RequestThreadClient *thread = new RequestThreadClient(this, ipAddress, portNumber, 0, &s);
+	RequestThreadClient *thread = new RequestThreadClient(this, ipAddress, portNumber, 0, &fs);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
-	return s;
+	return thread;
 }
 
 ClientFileThread* Peer::getFile(int fileID)
