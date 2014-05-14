@@ -26,7 +26,6 @@ void ServerFileThread::run()
 	peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 	connect(&peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 
-
 	if (!peer.waitForReadyRead(6000))
             qDebug("Failed to receive message from client") ;
         else
@@ -34,7 +33,7 @@ void ServerFileThread::run()
 	
 	peer.read(buffer, sizeof(fileRequest));
 	memcpy(&new_request, buffer, sizeof(fileRequest));
-	qDebug()<< "Staaan:"<<new_request.fileID;
+	qDebug()<< "Staaan:"<<new_request.fileID << share.getFileFromId(new_request.fileID);
 	//TODO get filepath from ShareFileSystem
 
 	QFile file("test_send.txt");
@@ -56,7 +55,9 @@ void ServerFileThread::run()
 
 	qDebug()<<"Data: "<<data.size() <<"  " <<new_request.payload;
 	peer.write(data);
-	peer.waitForReadyRead(5000);
+
+	peer.disconnectFromHost();
+	peer.waitForDisconnected();
 }
 
 void ServerFileThread::bytesWritten(qint64 bytes)

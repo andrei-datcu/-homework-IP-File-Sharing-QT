@@ -2,6 +2,7 @@
 #define PEER_H
 #include "ShareFileSystem.h"
 #include "clientfilethread.h"
+#include "requestthreadclient.h"
 #include <QObject>
 #include <QThread>
 
@@ -16,7 +17,7 @@ public:
 	int portNumber;
 
 	RequestThreadClient* getFileList();
-	ClientFileThread* getFile(int fileID);
+	ClientFileThread* getFile(int fileID, QString downloadPath);
 
     ShareFileSystem* fs;
 	

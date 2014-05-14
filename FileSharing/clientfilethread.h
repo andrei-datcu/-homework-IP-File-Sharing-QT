@@ -10,7 +10,7 @@ class ClientFileThread : public QThread
 	Q_OBJECT
 
 public:
-	ClientFileThread(QObject *parent, QString ipAddress, int portNumber, int fileID);
+	ClientFileThread(QObject *parent, QString ipAddress, int portNumber, int fileID, QString downloadPath);
 	~ClientFileThread();
 	void run();
 	void doConnect();
@@ -27,7 +27,7 @@ signals:
 		void gotBytes(int bytesNumber);
 
 private:
-	QString ipAddress;
+	QString ipAddress, downloadPath;
 	int portNumber;
 	int fileID;
 	QTcpSocket *peer;

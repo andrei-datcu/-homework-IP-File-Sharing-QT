@@ -29,9 +29,9 @@ RequestThreadClient* Peer::getFileList()
 	return thread;
 }
 
-ClientFileThread* Peer::getFile(int fileID)
+ClientFileThread* Peer::getFile(int fileID, QString downloadPath)
 {
-	ClientFileThread *thread = new ClientFileThread(this, ipAddress, FILEPORT, fileID);
+	ClientFileThread *thread = new ClientFileThread(this, ipAddress, FILEPORT, fileID, downloadPath);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
 	return thread;
