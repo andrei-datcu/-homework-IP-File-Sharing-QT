@@ -21,18 +21,17 @@ Peer::~Peer()
 }
 
 
-ShareFileSystem* Peer::getFileList()
+RequestThreadClient* Peer::getFileList()
 {
-	ShareFileSystem *s;
-	RequestThreadClient *thread = new RequestThreadClient(this, ipAddress, portNumber, 0, &s);
+	RequestThreadClient *thread = new RequestThreadClient(this, ipAddress, FILELISTPORT, 0, &fs);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
-	return s;
+	return thread;
 }
 
-ClientFileThread* Peer::getFile(int fileID)
+ClientFileThread* Peer::getFile(int fileID, QString downloadPath)
 {
-	ClientFileThread *thread = new ClientFileThread(this, ipAddress, FILEPORT, fileID);
+	ClientFileThread *thread = new ClientFileThread(this, ipAddress, FILEPORT, fileID, downloadPath);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
 	return thread;

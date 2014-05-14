@@ -4,11 +4,12 @@
 #define FAKECHUNKSIZE 5000
 
 #include <QFile>
-ClientFileThread::ClientFileThread(QObject *parent, QString ipAddress, int portNumber, int fileID)
+ClientFileThread::ClientFileThread(QObject *parent, QString ipAddress, int portNumber, int fileID, QString downloadPath)
 	: QThread(parent),
 	ipAddress(ipAddress),
 	portNumber(portNumber),
-	fileID(fileID)
+	fileID(fileID),
+	downloadPath(downloadPath)
 {
 
 }
@@ -35,7 +36,6 @@ void ClientFileThread::getFile()
 	memcpy(buffer, &new_request, sizeof(fileRequest));
 
 	peer->write(buffer, sizeof(fileRequest));
-	peer->waitForReadyRead(3000);
 }
 
 void ClientFileThread::doConnect()
@@ -45,7 +45,6 @@ void ClientFileThread::doConnect()
 	connect(peer, SIGNAL(connected()), this, SLOT(connected()));
 	connect(peer, SIGNAL(disconnected()), this, SLOT(disconnected()));
 	connect(peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
-	//connect(peer, SIGNAL(readyRead()), this, SLOT(readyRead()));
 
 	peer->connectToHost(ipAddress, portNumber);
 	if (!peer->waitForConnected(5000))
@@ -57,6 +56,7 @@ void ClientFileThread::downloadFile()
 	char buffer[9000];
 	int fileSize = 0;
 	int received = 0;
+	int sum_received = 0;
 	fileRequest new_request;
 	QByteArray data;
 
@@ -67,21 +67,20 @@ void ClientFileThread::downloadFile()
 	qDebug() << "Client"<<new_request.size << " "  << new_request.payload;
 	
 	fileSize = new_request.size;
-	QFile file(strcat(new_request.payload,"received"));
+	QFile file(downloadPath);
 	file.open(QFile::WriteOnly);
 	qDebug()<<fileSize;
 	while(fileSize > 0)
 	{
 		data = peer->read(FAKECHUNKSIZE);
 		received = data.size();
-		emit gotBytes(received);
+		sum_received += received;
+		emit gotBytes(sum_received);
 		file.write(data);
 		fileSize -= received;
 	}
 
 	file.close();
-	peer->waitForReadyRead(5000);
-
 }
 
 void ClientFileThread::disconnected()
@@ -92,7 +91,6 @@ void ClientFileThread::disconnected()
 void ClientFileThread::connected()
 {
 	qDebug() << "Client connected...";
-
 }
 
 void ClientFileThread::bytesWritten(qint64 bytes)

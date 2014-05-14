@@ -27,18 +27,7 @@ void RequestThreadClient::run()
 {
 	peer = new QTcpSocket();
 	doConnect();
-	switch(type)
-	{
-	case 0:
-		getFileList();
-		break;
-	
-	case 1:
-		break;
-	default:
-		break;
-	}
-	//makeRequest();
+	getFileList();
 	peer->waitForReadyRead(5000);
 }
 
@@ -56,7 +45,7 @@ void RequestThreadClient::getFileList()
 
 void RequestThreadClient::doConnect()
 {
-	qDebug() << "Connecting...";
+	qDebug() << "Connecting..." << portNumber;
 
 	connect(peer, SIGNAL(connected()), this, SLOT(connected()));
 	connect(peer, SIGNAL(disconnected()), this, SLOT(disconnected()));

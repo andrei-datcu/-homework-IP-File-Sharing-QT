@@ -118,3 +118,8 @@ ShareFileSystem::ShareFileSystem(const QByteArray &bytes){
 
     fillFromBytesArray(bytes);
 }
+
+QString ShareFileSystem::getFileFromId(int id){
+
+    return fileIds[id];
+}
