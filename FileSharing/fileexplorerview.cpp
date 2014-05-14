@@ -29,3 +29,9 @@ FileExplorerView::~FileExplorerView()
 {
 
 }
+
+
+QString FileExplorerView::getCurrentPath(){
+
+    return filemodel->fileInfo(currentIndex()).absoluteFilePath();
+}

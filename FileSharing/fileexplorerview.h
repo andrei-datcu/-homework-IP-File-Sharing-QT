@@ -12,6 +12,7 @@ public:
     FileExplorerView(QWidget *parent = 0);
     ~FileExplorerView();
 
+    QString getCurrentPath();
     QFileSystemModel *filemodel;
 };
 
