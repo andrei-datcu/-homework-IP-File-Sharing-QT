@@ -12,17 +12,17 @@ Server::Server(QObject *parent)
 void Server::startListeningConnectServer()
 {
 	if (!connectServer->listen(QHostAddress::Any, SERVERPORT))
-		qDebug()<<"Adevaratul server nu asculta";
+		qDebug()<<"[SERVER] Adevaratul server nu asculta";
 	else
-		qDebug()<<"Adevaratul server asculta\n";
+		qDebug()<<"[SERVER] Adevaratul server asculta incomingConnections";
 }
 
 void Server::startListeningDisconnectServer()
 {
 	if (!discServer->listen(QHostAddress::Any, SERVERPORT + 1))
-		qDebug()<<"Adevaratul server nu asculta";
+		qDebug()<<"[SERVER] Adevaratul server nu asculta";
 	else
-		qDebug()<<"Adevaratul server asculta\n";
+		qDebug()<<"[SERVER] Adevaratul server asculta disconnectRequests";
 }
 
 Server::~Server()

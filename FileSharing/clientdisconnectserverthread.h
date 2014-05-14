@@ -11,17 +11,14 @@ class ClientDisconnectServerThread : public QThread
 	Q_OBJECT
 
 public:
-	ClientDisconnectServerThread(QObject *parent);
+	ClientDisconnectServerThread(QObject *parent, QString ipAddress, int portNumber, QString username);
 	~ClientDisconnectServerThread();
 
 	void run();
 
-	public slots:
-		void readyRead();
-		void connected();
-		void disconnected();
-		void bytesWritten(qint64 bytes);
-
+	QString ipAddress;
+	int portNumber;
+	
 private:
 	int socketDescriptor;
 	QTcpSocket *peer;

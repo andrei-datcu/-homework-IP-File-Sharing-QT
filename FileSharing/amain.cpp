@@ -1,4 +1,5 @@
 #include "ShareFileSystem.h"
+#include "qt_windows.h"
 #include "sharedriveeditorwidget.h"
 #include <QApplication>
 #include <qstring.h>
@@ -27,9 +28,8 @@ int main(int argc, char *argv[]){
 	srv.startListeningDisconnectServer();
 
 	User myUsr("Tudor");
-	myUsr.connectToServer("127.0.0.1", SERVERPORT);
-
-	
+	//myUsr.connectToServer("127.0.0.1", SERVERPORT);
+	myUsr.disconnectFromServer("127.0.0.1", SERVERPORT + 1);
 
 	a.exec();
     return 0;

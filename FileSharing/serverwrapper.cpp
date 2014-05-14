@@ -25,6 +25,8 @@ void ServerWrapper::incomingConnection(qintptr socketDescriptor)
 {
 	ServerConnectionThread *thread = new ServerConnectionThread(this, socketDescriptor, server, lock);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+	lock->lock();
 	((Server*)server)->connectedClients++;
+	lock->unlock();
 	thread->start();
 }

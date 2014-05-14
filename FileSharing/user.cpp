@@ -37,21 +37,17 @@ void User::disconnectFromServer(QString ipAddress, int portNumber)
 void User::startListeningFilelist()
 {
 	if (!fileListServer->listen(QHostAddress::Any, FILELISTPORT))
-	{
-		qDebug()<<"Serverul nu asculta";
-	}
+		qDebug() << "Serverul nu asculta";
 	else
-		qDebug()<<"Serverul asculta\n";
+		qDebug() << "Serverul asculta pe filelistSocket";
 }
 
 void User::startListeningFile()
 {
 	if (!fileServer->listen(QHostAddress::Any, FILEPORT))
-	{
-		qDebug()<<"Serverul nu asculta";
-	}
+		qDebug() << "Serverul nu asculta";
 	else
-		qDebug()<<"Serverul asculta\n";
+		qDebug() << "Serverul asculta pe fileSocket";
 }
 
 
