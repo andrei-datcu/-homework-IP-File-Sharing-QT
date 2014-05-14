@@ -23,7 +23,7 @@ Peer::~Peer()
 
 RequestThreadClient* Peer::getFileList()
 {
-	RequestThreadClient *thread = new RequestThreadClient(this, ipAddress, portNumber, 0, &fs);
+	RequestThreadClient *thread = new RequestThreadClient(this, ipAddress, FILELISTPORT, 0, &fs);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
 	return thread;
