@@ -36,7 +36,7 @@ void ServerFileThread::run()
 	qDebug()<< "Staaan:"<<new_request.fileID << share.getFileFromId(new_request.fileID);
 	//TODO get filepath from ShareFileSystem
 
-	QFile file("test_send.txt");
+	QFile file(share.getFileFromId(new_request.fileID));
 	QByteArray filename;
 	if (!file.exists())
 	{

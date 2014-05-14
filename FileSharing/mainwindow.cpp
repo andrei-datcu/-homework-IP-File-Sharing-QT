@@ -47,13 +47,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     progresswidget = new DownloadsPogressWidget(this);
     tabWidget = new QTabWidget(this);
+    tabWidget->setMinimumHeight(300);
 
     QSplitter *qsp = new QSplitter(this);
     qsp->setOrientation(Qt::Vertical);
     qsp->addWidget(tabWidget);
     qsp->addWidget(progresswidget);
     setCentralWidget(qsp);
-    setMinimumHeight(500);
 }
 
 MainWindow::~MainWindow()
