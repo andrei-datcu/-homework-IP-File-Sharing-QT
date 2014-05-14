@@ -57,6 +57,7 @@ void ClientFileThread::downloadFile()
 	char buffer[9000];
 	int fileSize = 0;
 	int received = 0;
+	int sum_received = 0;
 	fileRequest new_request;
 	QByteArray data;
 
@@ -74,7 +75,8 @@ void ClientFileThread::downloadFile()
 	{
 		data = peer->read(FAKECHUNKSIZE);
 		received = data.size();
-		emit gotBytes(received);
+		sum_received += received;
+		emit gotBytes(sum_received);
 		file.write(data);
 		fileSize -= received;
 	}
