@@ -5,6 +5,8 @@
 #include "ShareFileSystem.h"
 #include "clientconnectserverthread.h"
 #include "clientdisconnectserverthread.h"
+#include "clientgetuserlistserver.h"
+
 
 #include <QObject>
 #include <QTcpSocket>
@@ -20,16 +22,24 @@ public:
 	QMap<QString, QString> userList;
 	void startListeningFilelist();
 	void startListeningFile();
-	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber);
+	void startListeningUserList();
+	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber = SERVERPORT);
 	void disconnectFromServer(QString ipAddress, int portNumber);
 	~User();
 
     ShareFileSystem *shared;
 
+	public slots:
+		void test_slot();
+
+signals:
+	void gotNewUserList();
+
 
 private:
 	FileResolvServer *fileListServer;
 	FileServer *fileServer;
+	ClientGetUserListServer *userListServer;
 	int numberIn;
 	
 };

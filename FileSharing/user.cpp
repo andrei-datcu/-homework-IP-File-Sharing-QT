@@ -13,11 +13,14 @@ User::User(QString username, QObject *parent)
 	: QObject(parent),
 	  username(username)
 {
+	connect(this, SIGNAL(gotNewUserList()), this, SLOT(test_slot()));
 	shared = new ShareFileSystem(QString(TESTFILE));
 	fileListServer = new FileResolvServer(this, *shared);
 	fileServer = new FileServer(this, *shared);
+	userListServer = new ClientGetUserListServer(this);
     startListeningFilelist();
     startListeningFile();
+	startListeningUserList();
 }
 
 ClientConnectServerThread* User::connectToServer(QString ipAddress, int portNumber)
@@ -51,10 +54,24 @@ void User::startListeningFile()
 		qDebug() << "Serverul asculta pe fileSocket";
 }
 
+void User::startListeningUserList()
+{
+	if (!userListServer->listen(QHostAddress::Any, USERLISTPORTONCLIENT))
+		qDebug() << "Serverul nu asculta";
+	else
+		qDebug() << "Serverul asculta pe userListSocket";
+}
+
+
 
 User::~User(){
 
 	shared->saveToFile(TESTFILE);
 	fileListServer->close();
 	free(shared);
+}
+
+void User::test_slot()
+{
+	qDebug()<<"Merge slotul si semnalul :D";
 }
