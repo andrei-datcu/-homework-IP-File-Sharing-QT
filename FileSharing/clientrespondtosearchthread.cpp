@@ -57,13 +57,17 @@ void ClientRespondToSearchThread::run()
 		qDebug()<< item.first << item.second;
 		result[QString::number(item.first)] = item.second;
 	}
-
 	data = toByteArray(result);
-	size = sizeof(data);
-	peer.write((char*)&size, sizeof(int));
-
-	peer.write(data);
-
+	if (result.size() > 0)
+	{
+		size = sizeof(data);
+		peer.write((char*)&size, sizeof(int));
+		peer.write(data);
+	}
+	else
+	{
+		size = 0;
+		peer.write((char*)&size, sizeof(int));
+	}
 	peer.waitForReadyRead(3000);
-	qDebug()<<data;	
 }

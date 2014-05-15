@@ -26,7 +26,7 @@ void ClientSearchThread::run()
 	for (i=the_user->userList.begin(); i!=the_user->userList.end(); ++i)
 	{
 		doConnect(i.value());
-		doTheSearch();
+		doTheSearch(i.key());
 		//peer->disconnectFromHost();
 		//peer->waitForDisconnected(10);
 	}
@@ -42,7 +42,7 @@ void ClientSearchThread::doConnect(QString ipAddress)
 		qDebug()<<"Error at Connecting...";
 }
 
-void ClientSearchThread::doTheSearch()
+void ClientSearchThread::doTheSearch(QString peerUserName)
 {
 	int new_size;
 	char buffer[100];
@@ -53,23 +53,32 @@ void ClientSearchThread::doTheSearch()
 	peer->write((char *)&size, sizeof(int));
 	peer->write(data);
 
-	qDebug()<<"Mircea asteapta";
 	peer->waitForReadyRead(-1);
-	qDebug()<<"Mircea nu asteapta";
 
 	peer->read(buffer, sizeof(int));
+	memcpy(&new_size, buffer, sizeof(int));
+	//qDebug()<<new_size;
+	if (new_size != 0)
+	{
+		while (new_size > 0)
+		{
+			buff = peer->readAll();
+			recvData += buff;
+			new_size -= buff.size();
+		}
+
+		oneResult = fromByteArray(recvData);
+		qDebug() << "Mircea" << oneResult;
+		if (oneResult.size() > 0)
+		{
+			qDebug()<<"Got something for you";
+			QMap<QString, QString>::iterator i;
+			for (i=oneResult.begin(); i!= oneResult.end(); ++i)
+			{
+				std::tuple<QString, QString, QString> new_tuplu(peerUserName, i.key(), i.value());
+				results.push_back(new_tuplu);
+			}
+		}
+	}
 	
-	//memcpy(&new_size, buffer, sizeof(int));
-	//if (new_size != 0)
-	//{
-	//	while (new_size > 0)
-	//	{
-	//		buff = peer->readAll();
-	//		data += buff;
-	//		size -= buff.size();
-	//	}
-	//}
-	//
-	//oneResult = fromByteArray(data);
-	//qDebug() << "Mircea" << oneResult;
 }

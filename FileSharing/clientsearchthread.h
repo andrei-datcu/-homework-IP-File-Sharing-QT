@@ -4,6 +4,8 @@
 #include <QThread>
 #include <QTcpSocket>
 #include <QMap>
+#include <vector>
+#include <tuple>
 
 class ClientSearchThread : public QThread
 {
@@ -15,13 +17,13 @@ public:
 
 	void run();
 	void doConnect(QString ipAddress);
-	void doTheSearch();
+	void doTheSearch(QString peerUserName);
 
 private:
 	QObject *user;
 	QString searchName;
 	QTcpSocket *peer;
-	QMap<int, QString> results;
+	std::vector<std::tuple<QString, QString, QString>> results;
 	int size;
 	QByteArray data;
 	
