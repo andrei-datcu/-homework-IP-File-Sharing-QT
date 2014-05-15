@@ -20,6 +20,7 @@ void ServerUserlistUpdateThread::run()
 	for(QMap<QString, QString>::iterator it=userList.begin(); it != userList.end(); it++) {
 		if (it.key() != newUser) {
 			peer = new QTcpSocket();
+			peer->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 			peer->connectToHost(it.value(), UPDATEPORT);
 			if (!peer->waitForConnected(5000))
 				qDebug()<<"[SERVER] Error connecting to UPDATEPORT...";
