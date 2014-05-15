@@ -64,6 +64,7 @@ void ClientConnectServerThread::getUserList()
 	QMap<QString, QString> userList;
 	serverConnectResponse new_response;
 	int size;
+	User *the_user = (User *) user;
 
 	peer->read(buffer, sizeof(int));
 	memcpy(&size, buffer, sizeof(int));
@@ -79,13 +80,14 @@ void ClientConnectServerThread::getUserList()
 		userList = fromByteArray(data);
 		qDebug() << "Clientttt" << userList;
 		
-		User *the_user = (User *) user;
 		the_user->userList = userList; 
+		the_user->usernameOk = true;
 		emit gotUserList();
 	}
 	else
-		emit changeUsername();
-
+	{
+		the_user->usernameOk = false;
+	}
 }
 
 void ClientConnectServerThread::disconnected()

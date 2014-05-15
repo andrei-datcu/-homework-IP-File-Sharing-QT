@@ -1,6 +1,7 @@
 #include "user.h"
 #include "requestthread.h"
 #include "requestthreadclient.h"
+#include "clientsearchthread.h"
 #include "fileresolvserver.h"
 #include "utils.h"
 #include <windows.h>
@@ -74,4 +75,12 @@ User::~User(){
 void User::test_slot()
 {
 	qDebug()<<"Merge slotul si semnalul :D";
+}
+
+
+void User::searchFile(QString searchName)
+{
+	ClientSearchThread *thread = new ClientSearchThread(this, searchName);
+	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+	thread->start();
 }

@@ -20,11 +20,14 @@ public:
 	User(QString username, QObject *parent = 0);
 	QString username;
 	QMap<QString, QString> userList;
+	QMap<int, QString> searchResult;
+	bool usernameOk;
 	void startListeningFilelist();
 	void startListeningFile();
 	void startListeningUserList();
 	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber = SERVERPORT);
 	void disconnectFromServer(QString ipAddress, int portNumber);
+	void searchFile(QString searchName);
 	~User();
 
     ShareFileSystem *shared;
