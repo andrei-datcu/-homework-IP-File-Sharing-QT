@@ -31,12 +31,14 @@ ClientConnectServerThread* User::connectToServer(QString ipAddress, int portNumb
 	ClientConnectServerThread *thread = new ClientConnectServerThread(this, ipAddress, portNumber, username, this);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
+    serverIp = ipAddress;
+    serverPortNo = portNumber;
 	return thread;
 }
 
-void User::disconnectFromServer(QString ipAddress, int portNumber)
+void User::disconnectFromServer()
 {
-	ClientDisconnectServerThread *thread = new ClientDisconnectServerThread(this, ipAddress, portNumber, username);
+	ClientDisconnectServerThread *thread = new ClientDisconnectServerThread(this, serverIp, serverPortNo, username);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
 }
