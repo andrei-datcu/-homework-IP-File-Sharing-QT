@@ -21,6 +21,8 @@ public:
     void saveToFile(const QString &fileName);
     QByteArray toByteArray();
 
+    std::list<std::pair<int, QString>> searchInFiles(const QString &searchString);
+
     QString getFileFromId(int id);
 private:
 

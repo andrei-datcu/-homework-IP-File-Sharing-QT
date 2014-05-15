@@ -123,3 +123,13 @@ QString ShareFileSystem::getFileFromId(int id){
 
     return fileIds[id];
 }
+
+std::list<std::pair<int, QString>> ShareFileSystem::searchInFiles(const QString &searchString){
+
+    std::list<std::pair<int, QString>> result;
+    for (auto item : fileIds)
+        if (item.second.contains(searchString))
+            result.push_back(item);
+
+    return result;
+}

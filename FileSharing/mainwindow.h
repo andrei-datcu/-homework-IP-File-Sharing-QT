@@ -10,6 +10,8 @@
 #include "sharedriveeditorwidget.h"
 #include "user.h"
 
+#include "usersdialog.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,6 +28,9 @@ private:
     ShareDriveEditorWidget *shareeditorwidget;
     std::vector<Peer*> activePeers;
     User myUser;
+
+    UsersDialog *uDialog;
+    QAction *connectToServerAction;
 };
 
 #endif // MAINWINDOW_H
