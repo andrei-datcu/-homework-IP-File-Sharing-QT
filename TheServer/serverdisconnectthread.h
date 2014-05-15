@@ -17,9 +17,6 @@ public:
 	void run();
 	QMutex *lock;
 
-public slots:
-	void bytesWritten(qint64 bytes);
-
 private:
 	int socketDescriptor;
 	QObject *server;

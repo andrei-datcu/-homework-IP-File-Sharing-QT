@@ -51,6 +51,5 @@ void ClientGetUserListThread::run()
 	
 	the_user->userList = userList;
 	emit the_user->gotNewUserList();
-	
-	
+		
 }

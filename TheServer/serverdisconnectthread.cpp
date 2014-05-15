@@ -31,7 +31,6 @@ void ServerDisconnectThread::run()
 	QTcpSocket peer;
 	peer.setSocketDescriptor(socketDescriptor);
 	peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
-	//connect(&peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 	
 	if (!peer.waitForReadyRead(6000))
         qDebug("[SERVER] Failed to receive message with username from client") ;
@@ -64,9 +63,4 @@ void ServerDisconnectThread::run()
 
 	peer.waitForReadyRead(3000);
 
-}
-
-void ServerDisconnectThread::bytesWritten(qint64 bytes)
-{
-	qDebug() << bytes << " bytes written...";
 }
