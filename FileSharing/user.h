@@ -17,13 +17,15 @@ class User : public QObject
 public:
 	User(QString username, QObject *parent = 0);
 	QString username;
+	QMap<QString, QString> userList;
 	void startListeningFilelist();
 	void startListeningFile();
-	void connectToServer(QString ipAddress, int portNumber);
+	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber);
 	void disconnectFromServer(QString ipAddress, int portNumber);
 	~User();
 
     ShareFileSystem *shared;
+
 
 private:
 	FileResolvServer *fileListServer;

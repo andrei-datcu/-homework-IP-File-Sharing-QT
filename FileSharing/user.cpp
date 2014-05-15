@@ -20,11 +20,12 @@ User::User(QString username, QObject *parent)
     startListeningFile();
 }
 
-void User::connectToServer(QString ipAddress, int portNumber)
+ClientConnectServerThread* User::connectToServer(QString ipAddress, int portNumber)
 {
-	ClientConnectServerThread *thread = new ClientConnectServerThread(this, ipAddress, portNumber, username);
+	ClientConnectServerThread *thread = new ClientConnectServerThread(this, ipAddress, portNumber, username, this);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
+	return thread;
 }
 
 void User::disconnectFromServer(QString ipAddress, int portNumber)

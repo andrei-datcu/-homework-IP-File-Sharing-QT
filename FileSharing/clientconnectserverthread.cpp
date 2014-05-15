@@ -1,10 +1,15 @@
 #include "clientconnectserverthread.h"
+#include "user.h"
+#include <QMap>
 
-ClientConnectServerThread::ClientConnectServerThread(QObject *parent, QString ipAddress, int portNumber, QString username)
+
+
+ClientConnectServerThread::ClientConnectServerThread(QObject *parent, QString ipAddress, int portNumber, QString username, QObject *user)
 	: QThread(parent),
 	ipAddress(ipAddress),
 	portNumber(portNumber),
-	username(username)
+	username(username),
+	user(user)
 {
 
 }
@@ -58,6 +63,10 @@ void ClientConnectServerThread::getUserList()
 	memcpy(&new_response, buffer, sizeof(serverConnectResponse));
 	memcpy(&userList, new_response.payload, new_response.size);
 	qDebug() << "[CLIENT] Got userList: "<<new_response.size << new_response.valid << userList;
+	User *the_user = (User *) user;
+	the_user->userList = userList; 
+	emit gotUserList();
+
 }
 
 void ClientConnectServerThread::disconnected()

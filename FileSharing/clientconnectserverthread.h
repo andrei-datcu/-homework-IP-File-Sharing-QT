@@ -1,17 +1,18 @@
+#pragma once
+
 #ifndef CLIENTCONNECTSERVERTHREAD_H
 #define CLIENTCONNECTSERVERTHREAD_H
 
 #include <QThread>
 #include <QTcpSocket>
 #include "utils.h"
-#include <QMap>
 
 class ClientConnectServerThread : public QThread
 {
 	Q_OBJECT
 
 public:
-	ClientConnectServerThread(QObject *parent, QString ipAddress, int portNumber, QString username);
+	ClientConnectServerThread(QObject *parent, QString ipAddress, int portNumber, QString username, QObject *user);
 	~ClientConnectServerThread();
 
 	QString ipAddress;
@@ -29,10 +30,14 @@ public:
 		void disconnected();
 		void bytesWritten(qint64 bytes);
 
+signals:
+		void gotUserList();
+
 private:
 	int socketDescriptor;
 	QTcpSocket *peer;
 	QString username;
+	QObject *user;
 	
 };
 
