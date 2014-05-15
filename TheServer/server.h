@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "serverwrapper.h"
 #include "serverdisconnectwrapper.h"
+#include "serveruserlistupdatethread.h"
 
 
 class Server : public QObject

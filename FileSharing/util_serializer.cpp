@@ -25,10 +25,9 @@ QMap<QString, QString> fromByteArray(const QByteArray &bytes)
 	QJsonDocument jdoc(QJsonDocument::fromJson(bytes));
 	QJsonObject json = jdoc.object();
 	QJsonArray userList = json["userlist"].toArray();
-	for (const QJsonValue &v : userList)
-		result.insert(v.toObject()["address"].toString(), v.toObject()["username"].toString());
-
+	for (const QJsonValue &v : userList) {
+		result.insert(v.toObject()["username"].toString(), v.toObject()["address"].toString());
+	}
 	return result;
 	
-
 }

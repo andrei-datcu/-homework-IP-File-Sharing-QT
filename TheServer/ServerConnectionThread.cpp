@@ -43,20 +43,17 @@ void ServerConnectionThread::run()
 		srv->userList.insert(new_client.userName, peer.peerAddress().toString());
 		lock->unlock();
 
-		//qDebug() << "[SERVER] S-a conectat: " << new_client.userName;
-		//new_response.valid = 1;
-		//new_response.size = sizeof(toByteArray(srv->userList).data());
-		////AICI
-		//memcpy(new_response.payload, un_nume.data(), un_nume.count());
-		//memcpy(buffer, &new_response, sizeof(serverConnectResponse));
-		//peer.write(buffer, sizeof(serverConnectResponse));
-		
+		qDebug() << "[SERVER] S-a conectat: " << new_client.userName;
 		
 		QByteArray transfer = toByteArray(srv->userList);
 		size = transfer.count();
+
 		peer.write((char *)&size, sizeof(int));
 		peer.write(transfer);
-		
+
+		ServerUserlistUpdateThread *thread = new ServerUserlistUpdateThread(0, srv->userList, new_client.userName);
+		thread->start();
+
 	} else {
 		qDebug() << "[SERVER] Username-ul este deja folosit!";
 		new_response.valid = 0;
@@ -64,7 +61,6 @@ void ServerConnectionThread::run()
 		peer.write(buffer, sizeof(serverConnectResponse));
 	}
 
-	qDebug()<< "[SERVER] Updated userList: " << new_response.size<<srv->userList;
 	peer.waitForReadyRead(3000);
 
 }

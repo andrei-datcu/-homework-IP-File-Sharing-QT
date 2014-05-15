@@ -7,6 +7,7 @@
 #define CHUNKSIZE 1000
 #define SERVERIPADDRESS "127.0.0.1"
 #define SERVERPORT 9191
+#define UPDATEPORT 7777
 
 
 
