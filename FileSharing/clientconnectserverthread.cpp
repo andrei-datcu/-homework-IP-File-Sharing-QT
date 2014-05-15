@@ -67,19 +67,24 @@ void ClientConnectServerThread::getUserList()
 
 	peer->read(buffer, sizeof(int));
 	memcpy(&size, buffer, sizeof(int));
-	qDebug() << "Clientttt" << size;
-	while (size > 0)
+	if (size != 0)
 	{
-		buff = peer->readAll();
-		data += buff;
-		size -= buff.size();
+		qDebug() << "Clientttt" << size;
+		while (size > 0)
+		{
+			buff = peer->readAll();
+			data += buff;
+			size -= buff.size();
+		}
+		userList = fromByteArray(data);
+		qDebug() << "Clientttt" << userList;
+		
+		User *the_user = (User *) user;
+		the_user->userList = userList; 
+		emit gotUserList();
 	}
-	userList = fromByteArray(data);
-	qDebug() << "Clientttt" << userList;
-	
-	User *the_user = (User *) user;
-	the_user->userList = userList; 
-	emit gotUserList();
+	else
+		emit changeUsername();
 
 }
 

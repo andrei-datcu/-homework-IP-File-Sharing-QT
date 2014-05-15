@@ -32,6 +32,7 @@ public:
 
 signals:
 		void gotUserList();
+		void changeUsername();
 
 private:
 	int socketDescriptor;
