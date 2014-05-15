@@ -38,7 +38,7 @@ ClientConnectServerThread* User::connectToServer(QString ipAddress, int portNumb
 
 ClientDisconnectServerThread* User::disconnectFromServer()
 {
-	ClientDisconnectServerThread *thread = new ClientDisconnectServerThread(this, serverIp, serverPortNo, username);
+	ClientDisconnectServerThread *thread = new ClientDisconnectServerThread(this, serverIp, serverPortNo + 1, username);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
     return thread;
