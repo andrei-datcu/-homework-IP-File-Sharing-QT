@@ -36,11 +36,12 @@ ClientConnectServerThread* User::connectToServer(QString ipAddress, int portNumb
 	return thread;
 }
 
-void User::disconnectFromServer()
+ClientDisconnectServerThread* User::disconnectFromServer()
 {
 	ClientDisconnectServerThread *thread = new ClientDisconnectServerThread(this, serverIp, serverPortNo, username);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
+    return thread;
 }
 
 void User::startListeningFilelist()

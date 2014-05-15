@@ -126,6 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){
 
-    if (myUser.usernameOk)
-        myUser.disconnectFromServer();
+    if (myUser.usernameOk){
+        myUser.disconnectFromServer()->wait();
+    }
 }

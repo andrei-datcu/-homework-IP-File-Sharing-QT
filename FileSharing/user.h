@@ -29,7 +29,7 @@ public:
 	void startListeningSearch();
 
 	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber = SERVERPORT);
-	void disconnectFromServer();
+	ClientDisconnectServerThread* disconnectFromServer();
 	void searchFile(QString searchName);
 	~User();
 
