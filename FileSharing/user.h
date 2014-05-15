@@ -29,7 +29,7 @@ public:
 	void startListeningSearch();
 
 	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber = SERVERPORT);
-	void disconnectFromServer(QString ipAddress, int portNumber);
+	ClientDisconnectServerThread* disconnectFromServer();
 	void searchFile(QString searchName);
 	~User();
 
@@ -48,6 +48,8 @@ private:
 	ClientGetUserListServer *userListServer;
 	ClientRespondToSearchServer *searchServer;
 	int numberIn;
+    QString serverIp;
+    int serverPortNo;
 	
 };
 

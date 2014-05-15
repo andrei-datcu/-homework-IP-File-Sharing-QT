@@ -17,12 +17,9 @@ UsersDialog::UsersDialog(User &u, QWidget *parent)
 
         for (auto item : userListWidget->selectedItems()){
             selectedPeer = new Peer(item->text(), myUser.userList[item->text()]);
-            setResult(QDialog::Accepted);
-            close();
+            accept();
             return;
         }
-
-
     });
 }
 

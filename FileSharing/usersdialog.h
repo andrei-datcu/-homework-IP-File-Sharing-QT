@@ -15,9 +15,10 @@ class UsersDialog : public QDialog
 public:
     UsersDialog(User &u, QWidget *parent = 0);
     ~UsersDialog();
-    void populateList();
-
     Peer *selectedPeer;
+
+public slots:
+    void populateList();
 
 private:
     User &myUser;

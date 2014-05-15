@@ -13,6 +13,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), myUser(""){
 
+
     QMenu *menu = new QMenu("File", this);
 	menuBar()->addMenu(menu);
 
@@ -75,10 +76,15 @@ MainWindow::MainWindow(QWidget *parent)
     menu->addAction(connectToServerAction);
 
     uDialog = new UsersDialog(myUser, this);
+
+        
+    connect(&myUser, SIGNAL(gotNewUserList()), uDialog, SLOT(populateList())); 
+
     QAction *a4 = new QAction("Search users...", this);
     menu->addAction(a4);
     connect(a4, &QAction::triggered, [this](){
-        if (uDialog->exec()){
+        uDialog->exec();
+        if (uDialog->result() == QDialog::Accepted){
             activePeers.push_back(uDialog->selectedPeer);
             QProgressDialog *pd = new QProgressDialog(this);
             pd->setRange(0, 0);
@@ -118,7 +124,9 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(qsp);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow(){
 
+    if (myUser.usernameOk){
+        myUser.disconnectFromServer()->wait();
+    }
 }
