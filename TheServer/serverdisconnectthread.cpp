@@ -53,6 +53,11 @@ void ServerDisconnectThread::run()
 		peer.write(buffer, sizeof(serverConnectResponse));
 
 		qDebug() << "[SERVER] User disconnected! " << new_response.size<<srv->userList;
+
+		ServerUserlistUpdateThread *thread = new ServerUserlistUpdateThread(0, srv->userList, new_client.userName);
+		connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+		thread->start();
+
 	} else {
 		new_response.valid = 0;
 		memcpy(buffer, &new_response, sizeof(serverConnectResponse));
