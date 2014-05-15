@@ -11,28 +11,26 @@
         {
             "fullname": "C:/Documents and Settings/Owner/Documents/GitHub/Lupii/ip-file-sharing-behind-nat/Specs.pdf",
             "id": 4
+        },
+        {
+            "fullname": "C:/Users/Owner/Downloads/animatie.avi",
+            "id": 8
+        },
+        {
+            "fullname": "C:/Users/Owner/Downloads/Bode_Miller.mp4",
+            "id": 7
         }
     ],
     "root": {
         "children": [
             {
                 "children": [
-                    {
-                        "children": [
-                        ],
-                        "info": {
-                            "dir": false,
-                            "index": 1,
-                            "name": "rnregie_net.txt",
-                            "size": 80
-                        }
-                    }
                 ],
                 "info": {
-                    "dir": true,
-                    "index": 0,
-                    "name": "andrei",
-                    "size": -1
+                    "dir": false,
+                    "index": 7,
+                    "name": "Bode_Miller.mp4",
+                    "size": 3432114
                 }
             },
             {
@@ -40,9 +38,9 @@
                 ],
                 "info": {
                     "dir": false,
-                    "index": 4,
-                    "name": "Specs.pdf",
-                    "size": 869253
+                    "index": 8,
+                    "name": "animatie.avi",
+                    "size": 4875968
                 }
             }
         ],
@@ -53,5 +51,5 @@
             "size": 0
         }
     },
-    "totalIndex": 7
+    "totalIndex": 9
 }
