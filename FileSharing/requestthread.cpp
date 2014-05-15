@@ -19,6 +19,7 @@ RequestThread::~RequestThread()
 void RequestThread::run()
 {
 	char buffer[1024];
+	int size;
 	QTcpSocket peer;
 	peer.setSocketDescriptor(socketDescriptor);
 	peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
@@ -29,7 +30,9 @@ void RequestThread::run()
             qDebug("Read from client");
 	
 	peer.read(buffer, peer.bytesAvailable());
-	qDebug()<<buffer;
+	size = sizeof(share.toByteArray());
+	qDebug()<<buffer << size;
+	peer.write((char *)&size, sizeof(int));
 	peer.write(share.toByteArray());
 	peer.waitForDisconnected(3000);
 }

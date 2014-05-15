@@ -61,13 +61,21 @@ void RequestThreadClient::doConnect()
 void RequestThreadClient::readyRead()
 {
 	char buffer[5000];
-    QByteArray buff;
+    QByteArray buff, content;
+	int size;
     // TODO!! Pune-l in whileee!!
 	//peer->read(buff, peer->bytesAvailable());
-    buff = peer->readAll();
-
-    *share = new ShareFileSystem(buff);
-	qDebug() << "Client" << buffer;
+	peer->read(buffer, sizeof(int)); 
+	memcpy(&size, buffer, sizeof(int));
+	qDebug() << "Clientttt" << size;
+	while (size > 0)
+	{
+		buff = peer->readAll();
+		content += buff;
+		size -= buff.size();
+	}
+    *share = new ShareFileSystem(content);
+	qDebug() << "Client" << buff;
 }
 
 void RequestThreadClient::disconnected()
