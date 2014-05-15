@@ -19,9 +19,11 @@ User::User(QString username, QObject *parent)
 	fileListServer = new FileResolvServer(this, *shared);
 	fileServer = new FileServer(this, *shared);
 	userListServer = new ClientGetUserListServer(this);
+	searchServer = new ClientRespondToSearchServer(this);
     startListeningFilelist();
     startListeningFile();
 	startListeningUserList();
+	startListeningSearch();
 }
 
 ClientConnectServerThread* User::connectToServer(QString ipAddress, int portNumber)
@@ -60,7 +62,15 @@ void User::startListeningUserList()
 	if (!userListServer->listen(QHostAddress::Any, USERLISTPORTONCLIENT))
 		qDebug() << "Serverul nu asculta";
 	else
-		qDebug() << "Serverul asculta pe userListSocket";
+		qDebug() << username << "Serverul asculta pe userListSocket";
+}
+
+void User::startListeningSearch()
+{
+	if (!searchServer->listen(QHostAddress::Any, SEARCHPORT))
+		qDebug() << "Serverul de search  nu asculta";
+	else
+		qDebug() << username << "Serverul de search asculta pe "<<SEARCHPORT;
 }
 
 

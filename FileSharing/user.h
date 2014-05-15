@@ -6,6 +6,7 @@
 #include "clientconnectserverthread.h"
 #include "clientdisconnectserverthread.h"
 #include "clientgetuserlistserver.h"
+#include "clientrespondtosearchserver.h"
 
 
 #include <QObject>
@@ -25,6 +26,8 @@ public:
 	void startListeningFilelist();
 	void startListeningFile();
 	void startListeningUserList();
+	void startListeningSearch();
+
 	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber = SERVERPORT);
 	void disconnectFromServer(QString ipAddress, int portNumber);
 	void searchFile(QString searchName);
@@ -43,6 +46,7 @@ private:
 	FileResolvServer *fileListServer;
 	FileServer *fileServer;
 	ClientGetUserListServer *userListServer;
+	ClientRespondToSearchServer *searchServer;
 	int numberIn;
 	
 };
