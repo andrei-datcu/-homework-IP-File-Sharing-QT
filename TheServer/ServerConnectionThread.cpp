@@ -1,4 +1,5 @@
 #include "ServerConnectionThread.h"
+#include "util_serializer.h"
 
 ServerConnectionThread::ServerConnectionThread(QObject *parent, int socketDescriptor, QObject *server, QMutex *lock)
 	: QThread(parent), 
@@ -19,6 +20,7 @@ void ServerConnectionThread::run()
 	connectRequest new_client;
 	serverConnectResponse new_response;
 	char buffer[10000];
+	int size;
 
 	Server *srv = (Server*) server;
 
@@ -41,12 +43,20 @@ void ServerConnectionThread::run()
 		srv->userList.insert(new_client.userName, peer.peerAddress().toString());
 		lock->unlock();
 
-		qDebug() << "[SERVER] S-a conectat: " << new_client.userName;
-		new_response.valid = 1;
-		new_response.size = sizeof(srv->userList);
-		memcpy(new_response.payload, &(srv->userList), sizeof(srv->userList));
-		memcpy(buffer, &new_response, sizeof(serverConnectResponse));
-		peer.write(buffer, sizeof(serverConnectResponse));
+		//qDebug() << "[SERVER] S-a conectat: " << new_client.userName;
+		//new_response.valid = 1;
+		//new_response.size = sizeof(toByteArray(srv->userList).data());
+		////AICI
+		//memcpy(new_response.payload, un_nume.data(), un_nume.count());
+		//memcpy(buffer, &new_response, sizeof(serverConnectResponse));
+		//peer.write(buffer, sizeof(serverConnectResponse));
+		
+		
+		QByteArray transfer = toByteArray(srv->userList);
+		size = transfer.count();
+		peer.write((char *)&size, sizeof(int));
+		peer.write(transfer);
+		
 	} else {
 		qDebug() << "[SERVER] Username-ul este deja folosit!";
 		new_response.valid = 0;

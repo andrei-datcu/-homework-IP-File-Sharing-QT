@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "server.h"
+#include <QByteArray>
 #include <QThread>
 #include <QTcpSocket>
 

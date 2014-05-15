@@ -1,5 +1,9 @@
 #pragma once
 
+#include <qjsonarray.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
+
 #define TESTFILE "test.json"
 #define FILELISTPORT 8888
 #define FILEPORT 9999

@@ -1,5 +1,9 @@
 #include "clientconnectserverthread.h"
 #include "user.h"
+#include "util_serializer.h"
+#include <qmap.h>
+#include <QByteArray>
+
 #include <QMap>
 
 
@@ -56,13 +60,23 @@ void ClientConnectServerThread::loginToServer()
 void ClientConnectServerThread::getUserList()
 {
 	char buffer[4000];
+	QByteArray data, buff;
 	QMap<QString, QString> userList;
 	serverConnectResponse new_response;
+	int size;
 
-	peer->read(buffer, sizeof(serverConnectResponse));
-	memcpy(&new_response, buffer, sizeof(serverConnectResponse));
-	memcpy(&userList, new_response.payload, new_response.size);
-	qDebug() << "[CLIENT] Got userList: "<<new_response.size << new_response.valid << userList;
+	peer->read(buffer, sizeof(int));
+	memcpy(&size, buffer, sizeof(int));
+	qDebug() << "Clientttt" << size;
+	while (size > 0)
+	{
+		buff = peer->readAll();
+		data += buff;
+		size -= buff.size();
+	}
+	userList = fromByteArray(data);
+	qDebug() << "Clientttt" << userList;
+	
 	User *the_user = (User *) user;
 	the_user->userList = userList; 
 	emit gotUserList();
