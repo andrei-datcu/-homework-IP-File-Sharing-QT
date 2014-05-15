@@ -36,11 +36,6 @@ void ClientConnectServerThread::doConnect()
 {
 	qDebug() << "[CLIENT] Connecting...";
 
-	//connect(peer, SIGNAL(connected()), this, SLOT(connected()));
-	//connect(peer, SIGNAL(disconnected()), this, SLOT(disconnected()));
-	//connect(peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
-	//connect(peer, SIGNAL(readyRead()), this, SLOT(readyRead()));
-
 	peer->connectToHost(ipAddress, portNumber);
 	if (!peer->waitForConnected(5000))
 		qDebug()<<"[CLIENT] Error at Connecting...";
@@ -88,27 +83,4 @@ void ClientConnectServerThread::getUserList()
 	{
 		the_user->usernameOk = false;
 	}
-}
-
-void ClientConnectServerThread::disconnected()
-{
-	qDebug() << "disconnected...";
-}
-
-void ClientConnectServerThread::connected()
-{
-	qDebug() << "Client connected...";
-
-}
-
-void ClientConnectServerThread::bytesWritten(qint64 bytes)
-{
-	qDebug() << bytes << " bytes written...";
-}
-
-void ClientConnectServerThread::readyRead()
-{
-	char buffer[5000];
-	peer->read(buffer, peer->bytesAvailable());
-	qDebug() << "Client" << buffer;
 }
