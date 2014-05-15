@@ -15,4 +15,4 @@ x64/
 Debug/
 *test_*
 *test_send.txt
-*.json
+*.json*

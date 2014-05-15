@@ -9,16 +9,20 @@
             "id": 3
         },
         {
-            "fullname": "C:/Documents and Settings/Owner/Documents/GitHub/Lupii/ip-file-sharing-behind-nat/Specs.pdf",
-            "id": 4
-        },
-        {
             "fullname": "C:/Users/Owner/Downloads/animatie.avi",
             "id": 8
         },
         {
+            "fullname": "C:/Documents and Settings/Owner/Documents/GitHub/Lupii/ip-file-sharing-behind-nat/Specs.pdf",
+            "id": 4
+        },
+        {
             "fullname": "C:/Users/Owner/Downloads/Bode_Miller.mp4",
             "id": 7
+        },
+        {
+            "fullname": "C:/Users/Owner/Downloads/2011_Matematică_Etapa judeteana_Rezultate__28.xls",
+            "id": 9
         }
     ],
     "root": {
@@ -42,6 +46,16 @@
                     "name": "animatie.avi",
                     "size": 4875968
                 }
+            },
+            {
+                "children": [
+                ],
+                "info": {
+                    "dir": false,
+                    "index": 9,
+                    "name": "2011_Matematică_Etapa judeteana_Rezultate__28.xls",
+                    "size": 89600
+                }
             }
         ],
         "info": {
@@ -51,5 +65,5 @@
             "size": 0
         }
     },
-    "totalIndex": 9
+    "totalIndex": 10
 }
