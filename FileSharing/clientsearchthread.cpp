@@ -20,15 +20,13 @@ ClientSearchThread::~ClientSearchThread()
 
 void ClientSearchThread::run()
 {
-	peer = new QTcpSocket();
 	User *the_user = (User*) user;
 	QMap<QString, QString>::iterator i;
 	for (i=the_user->userList.begin(); i!=the_user->userList.end(); ++i)
 	{
+		peer = new QTcpSocket();
 		doConnect(i.value());
 		doTheSearch(i.key());
-		//peer->disconnectFromHost();
-		//peer->waitForDisconnected(10);
 	}
 
 	peer->waitForReadyRead(3000);
@@ -57,7 +55,6 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 
 	peer->read(buffer, sizeof(int));
 	memcpy(&new_size, buffer, sizeof(int));
-	//qDebug()<<new_size;
 	if (new_size != 0)
 	{
 		while (new_size > 0)
@@ -78,6 +75,10 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 				std::tuple<QString, QString, QString> new_tuplu(peerUserName, i.key(), i.value());
 				results.push_back(new_tuplu);
 			}
+
+			User *the_user = (User*) user;
+			the_user->searchResult = results;
+			emit the_user->gotSearchResults();
 		}
 	}
 	

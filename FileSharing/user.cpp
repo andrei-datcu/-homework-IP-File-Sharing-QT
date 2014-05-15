@@ -15,6 +15,7 @@ User::User(QString username, QObject *parent)
 	  username(username)
 {
 	connect(this, SIGNAL(gotNewUserList()), this, SLOT(test_slot()));
+	connect(this, SIGNAL(gotSearchResults()), this, SLOT(test_slot()));
 	shared = new ShareFileSystem(QString(TESTFILE));
 	fileListServer = new FileResolvServer(this, *shared);
 	fileServer = new FileServer(this, *shared);
@@ -87,7 +88,7 @@ User::~User(){
 
 void User::test_slot()
 {
-	qDebug()<<"Merge slotul si semnalul :D";
+	qDebug()<<"Merge slotul si semnalul :D" << searchResult.size();
 }
 
 

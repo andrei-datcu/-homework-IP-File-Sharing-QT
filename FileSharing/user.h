@@ -21,7 +21,7 @@ public:
 	User(QString username, QObject *parent = 0);
 	QString username;
 	QMap<QString, QString> userList;
-	QMap<int, QString> searchResult;
+	std::vector<std::tuple<QString, QString, QString>> searchResult;
 	bool usernameOk;
 	void startListeningFilelist();
 	void startListeningFile();
@@ -40,6 +40,7 @@ public:
 
 signals:
 	void gotNewUserList();
+	void gotSearchResults();
 
 
 private:
