@@ -24,11 +24,6 @@ public:
 	void makeRequest();
 	void getUserList();
 
-	public slots:
-		void readyRead();
-		void connected();
-		void disconnected();
-		void bytesWritten(qint64 bytes);
 
 signals:
 		void gotUserList();
