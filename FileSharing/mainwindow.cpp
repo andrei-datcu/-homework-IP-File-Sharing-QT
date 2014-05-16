@@ -11,11 +11,15 @@
 #include <qmessagebox.h>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), myUser(""){
+    : QMainWindow(parent), myUser(""), searchTabPos(-1){
 
 
-    QMenu *menu = new QMenu("File", this);
-	menuBar()->addMenu(menu);
+    QMenu *mymenu = new QMenu("My System", this);
+    QMenu *servermenu = new QMenu("Sever", this);
+    QMenu *peersmenu = new QMenu("Peers", this);
+	menuBar()->addMenu(mymenu);
+    menuBar()->addMenu(servermenu);
+    menuBar()->addMenu(peersmenu);
 
 	QAction *a;
 	a = new QAction("Connect to a user...", this);
@@ -30,13 +34,13 @@ MainWindow::MainWindow(QWidget *parent)
             addPeer(user);
         }
     });
-	menu->addAction(a);
+	peersmenu->addAction(a);
 
     QAction *a2 = new QAction("Edit your share drive...", this);
     shareeditorwidget = new ShareDriveEditorWidget(*(myUser.shared), this);
 
     connect(a2, SIGNAL(triggered()), shareeditorwidget, SLOT(exec()));
-    menu->addAction(a2);
+    mymenu->addAction(a2);
 
 
     connectToServerAction = new QAction("Connect to server...", this);
@@ -64,15 +68,14 @@ MainWindow::MainWindow(QWidget *parent)
                    
         }
     });
-    menu->addAction(connectToServerAction);
+    servermenu->addAction(connectToServerAction);
 
     uDialog = new UsersDialog(myUser, this);
 
-        
     connect(&myUser, SIGNAL(gotNewUserList()), uDialog, SLOT(populateList())); 
 
     QAction *a4 = new QAction("Search users...", this);
-    menu->addAction(a4);
+    servermenu->addAction(a4);
     connect(a4, &QAction::triggered, [this](){
         uDialog->exec();
         if (uDialog->result() == QDialog::Accepted){
@@ -81,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     QAction *a5 = new QAction("Set username", this);
-    menu->addAction(a5);
+    servermenu->addAction(a5);
     connect(a5, &QAction::triggered, [this](){
         bool ok;
         QString text = QInputDialog::getText(this, "Set your username...",
@@ -96,18 +99,42 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
+
+    QAction *a6 = new QAction("Search file...", this);
+    servermenu->addAction(a6);
+    connect(a6, &QAction::triggered, [this](){
+        if (searchTabPos != -1)
+            tabWidget->setCurrentIndex(searchTabPos);
+        else{
+            tabWidget->addTab(searchWidget, "Search files...");
+            searchTabPos = tabWidget->count() - 1;
+        }
+    });
+
     progresswidget = new DownloadsPogressWidget(this);
+    searchWidget = new SearchFileWidget(myUser, progresswidget, this);
+    searchWidget->setVisible(false);
+
     tabWidget = new QTabWidget(this);
     tabWidget->setMinimumHeight(300);
     tabWidget->setTabsClosable(true);
 
     connect(tabWidget, &QTabWidget::tabCloseRequested, [this](const int &index){
+
+        if (index == searchTabPos){
+            tabWidget->removeTab(index);
+            searchTabPos = -1;
+            return;
+        }
+
         if (QMessageBox::question(this, "Confirmation", "Are you sure?", 
                      QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
             return; //user clicked no
 
-        activePeers.erase(activePeers.begin() + index);
-        tabWidget->removeTab(index);
+        int realIndex = index - (index > searchTabPos ? 1 : 0);
+
+        activePeers.erase(activePeers.begin() + realIndex);
+        tabWidget->removeTab(realIndex);
     });
 
     QSplitter *qsp = new QSplitter(this);

@@ -60,7 +60,9 @@ void ClientFileThread::downloadFile()
 	fileRequest new_request;
 	QByteArray data;
 
-	peer->waitForReadyRead(5000);
+	if (!peer->waitForReadyRead(-1)){
+        emit connectionFailed("");
+    }
 
 	peer->read(buffer, sizeof(fileRequest));
 	memcpy(&new_request, buffer, sizeof(fileRequest));
@@ -72,12 +74,12 @@ void ClientFileThread::downloadFile()
 	qDebug()<<fileSize;
 	while(fileSize > 0)
 	{
-        if (!peer->waitForReadyRead(-1)){
+        /*if (!peer->waitForReadyRead(-1)){
             file.close();
             QFile::remove(downloadPath);
             emit connectionFailed(downloadPath);
             return;
-        }
+        }*/
         data = peer->readAll();
 		received = data.count();
 		sum_received += received;

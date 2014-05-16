@@ -10,6 +10,7 @@
 #include "sharedriveeditorwidget.h"
 #include "user.h"
 
+#include "searchfilewidget.h"
 #include "usersdialog.h"
 
 class MainWindow : public QMainWindow
@@ -32,7 +33,10 @@ private:
     User myUser;
 
     UsersDialog *uDialog;
+    SearchFileWidget *searchWidget;
     QAction *connectToServerAction;
+
+    int searchTabPos;
 };
 
 #endif // MAINWINDOW_H
