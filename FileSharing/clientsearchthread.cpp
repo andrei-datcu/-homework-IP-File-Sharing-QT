@@ -65,14 +65,13 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 		}
 
 		oneResult = fromByteArray(recvData);
-		qDebug() << "Mircea" << oneResult;
 		if (oneResult.size() > 0)
 		{
 			qDebug()<<"Got something for you";
 			QMap<QString, QString>::iterator i;
 			for (i=oneResult.begin(); i!= oneResult.end(); ++i)
 			{
-				std::tuple<QString, QString, QString> new_tuplu(peerUserName, i.key(), i.value());
+				std::tuple<QString, int, QString> new_tuplu(peerUserName, i.key().toInt(), i.value());
 				results.push_back(new_tuplu);
 			}
 

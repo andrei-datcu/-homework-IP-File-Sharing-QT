@@ -21,7 +21,6 @@ public:
 
 	void run();
 	void doConnect();
-	void makeRequest();
 	void getFileList();
 
 	public slots:

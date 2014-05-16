@@ -23,7 +23,7 @@ private:
 	QObject *user;
 	QString searchName;
 	QTcpSocket *peer;
-	std::vector<std::tuple<QString, QString, QString>> results;
+	std::vector<std::tuple<QString, int, QString>> results;
 	int size;
 	QByteArray data;
 	

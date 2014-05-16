@@ -40,3 +40,8 @@ typedef struct
 	int size;
 	char payload[1000];
 } serverConnectResponse;
+
+
+/*
+Tuplu rezultat cautare (username(QString), idFile(int), numeFisier(QString) 
+*/

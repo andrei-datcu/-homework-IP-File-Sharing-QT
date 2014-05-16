@@ -31,16 +31,16 @@ void RequestThreadClient::run()
 	peer->waitForReadyRead(5000);
 }
 
-
-void RequestThreadClient::makeRequest()
-{
-	peer->write("Taygun biatch", 20);
-}
-
 void RequestThreadClient::getFileList()
 {
-	QString buffer("Filelist");
-	peer->write("Filelist", 8);
+	QByteArray filelist("filelist");
+	int sizeToWrite = filelist.count();
+	int written = 0;
+	while (sizeToWrite > 0)
+	{
+		written = peer->write(filelist);
+		sizeToWrite -= written;
+	}
 }
 
 void RequestThreadClient::doConnect()
