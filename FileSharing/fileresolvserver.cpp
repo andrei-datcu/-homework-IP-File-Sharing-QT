@@ -17,7 +17,7 @@ void FileResolvServer::incomingConnection(qintptr socketDescriptor)
 {
 	RequestThread *thread = new RequestThread(this, socketDescriptor, share);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
+    emit shareRequested();
 	++connectedClients;
 	thread->start();
 }

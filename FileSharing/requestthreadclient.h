@@ -20,8 +20,11 @@ public:
 	int type;
 
 	void run();
-	void doConnect();
+	bool doConnect();
 	void getFileList();
+
+signals:
+    void errorAtConnection();
 
 	public slots:
 		void readyRead();

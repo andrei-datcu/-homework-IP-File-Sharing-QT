@@ -37,6 +37,9 @@ public:
 
     ShareFileSystem *shared;
 
+
+    FileResolvServer *fileListServer;
+
 	public slots:
 		void test_slot();
 
@@ -46,7 +49,6 @@ signals:
 
 
 private:
-	FileResolvServer *fileListServer;
 	FileServer *fileServer;
 	ClientGetUserListServer *userListServer;
 	ClientRespondToSearchServer *searchServer;

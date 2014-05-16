@@ -13,6 +13,8 @@ public:
 	FileResolvServer(QObject *parent, ShareFileSystem &share);
 	~FileResolvServer();
 
+signals:
+    void shareRequested();
 
 protected:
 	void incomingConnection(qintptr socketDescriptor);
