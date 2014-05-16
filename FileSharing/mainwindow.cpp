@@ -36,11 +36,10 @@ MainWindow::MainWindow(QWidget *parent)
     });
 	peersmenu->addAction(a);
 
+    QAction *editDriveAction = new QAction("Edit your share drive...", this);
     connect(myUser.fileListServer, &FileResolvServer::shareRequested, [this](){
         this->editDriveAction->setEnabled(false);
     });
-
-    QAction *editDriveAction = new QAction("Edit your share drive...", this);
     shareeditorwidget = new ShareDriveEditorWidget(*(myUser.shared), this);
 
     connect(editDriveAction, SIGNAL(triggered()), shareeditorwidget, SLOT(exec()));
