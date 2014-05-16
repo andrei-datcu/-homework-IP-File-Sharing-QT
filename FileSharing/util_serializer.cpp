@@ -61,3 +61,40 @@ bool writeToSocket(QTcpSocket *socket, char *buffer, int byteCount)
 
 	return true;
 }
+
+QByteArray searchResultsToByteArray(const std::list<std::tuple<int, int, QString>> &l){
+
+    QJsonArray a;
+
+    for (auto item : l){
+        QJsonObject jo;
+        int id, size;
+        QString fileName;
+        std::tie(id, size, fileName) = item;
+        jo["id"] = id;
+        jo["size"]=size;
+        jo["filename"] = fileName;
+        a.append(jo);
+    }
+
+    QJsonObject obj;
+    obj["items"] = a;
+
+    QJsonDocument doc(obj);
+    return doc.toJson();
+}
+
+std::list<std::tuple<int, int, QString>> searchResultsFromByteArray(const QByteArray &data){
+
+    QJsonDocument doc(QJsonDocument::fromJson(data));
+
+    QJsonObject mainObj = doc.object();
+    QJsonArray arr = mainObj["items"].toArray();
+    std::list<std::tuple<int, int, QString>> result;
+    for (auto v : arr){
+        QJsonObject o = v.toObject();
+        result.push_back(std::make_tuple(o["id"].toInt(), o["size"].toInt(),o["filename"].toString())); 
+    }
+
+    return result;
+}
