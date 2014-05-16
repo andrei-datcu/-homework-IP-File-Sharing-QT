@@ -72,7 +72,7 @@ void ClientFileThread::downloadFile()
 	qDebug()<<fileSize;
 	while(fileSize > 0)
 	{
-        if (peer->waitForReadyRead(-1)){
+        if (!peer->waitForReadyRead(-1)){
             file.close();
             QFile::remove(downloadPath);
             emit connectionFailed(downloadPath);
