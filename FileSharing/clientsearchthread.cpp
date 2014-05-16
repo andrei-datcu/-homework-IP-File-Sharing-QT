@@ -43,29 +43,22 @@ void ClientSearchThread::doConnect(QString ipAddress)
 void ClientSearchThread::doTheSearch(QString peerUserName)
 {
 	int new_size;
-	char buffer[100];
-	QByteArray recvData, buff;
+	char buffer[4000];
 	std::list<std::tuple<int, int, QString>> oneResult;
 
-
-	peer->write((char *)&size, sizeof(int));
-	peer->write(data);
-
+	writeToSocket(peer, (char*)&size, sizeof(int));
+	writeToSocket(peer, data.data(), size);
 	peer->waitForReadyRead(-1);
 
-	peer->read(buffer, sizeof(int));
+	readFromSocket(peer, buffer, sizeof(int));
 	memcpy(&new_size, buffer, sizeof(int));
 	qDebug()<<"Got something for you"<<new_size;
 
 	if (new_size != 0)
 	{
-		while (new_size > 0)
-		{
-			buff = peer->readAll();
-			recvData += buff;
-			new_size -= buff.size();
-		}
-
+		
+		readFromSocket(peer, buffer, new_size);
+		QByteArray recvData(buffer, new_size);
 		oneResult = searchResultsFromByteArray(recvData);
 		if (oneResult.size() > 0)
 		{
@@ -75,6 +68,7 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 			for (auto item: oneResult)
 			{
 				std::tie(tuple_fileid, tuple_size, tuple_filename) = item;
+				qDebug()<<tuple_fileid<<tuple_size<<tuple_filename;
 				results.push_back(std::make_tuple(peerUserName, tuple_fileid, tuple_size, tuple_filename));
 			}
 			User *the_user = (User*) user;

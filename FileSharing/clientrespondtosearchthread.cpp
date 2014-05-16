@@ -21,7 +21,6 @@ void ClientRespondToSearchThread::run()
 {
 	int size;
 	char buffer[100];
-	QByteArray buff, data;
 	QTcpSocket peer;
 	std::list<std::tuple<int, int, QString>> result;
 
@@ -38,16 +37,11 @@ void ClientRespondToSearchThread::run()
             qDebug("Read from client");
 
 
-	peer.read(buffer,sizeof(int));
+	readFromSocket(&peer, buffer, sizeof(int));
 	memcpy(&size, buffer, sizeof(int));
 
-	while(size > 0)
-	{
-		buff = peer.readAll();
-		data += buff;
-		size -= buff.size();
-	}
-
+	readFromSocket(&peer, buffer, size);
+	QByteArray data(buffer, size);
 
 	qDebug() << data;
 	int tuple_size, tuple_fileID;
@@ -57,14 +51,14 @@ void ClientRespondToSearchThread::run()
 	
 	if (lista.size() > 0)
 	{
-		size = sizeof(data);
-		peer.write((char*)&size, sizeof(int));
-		peer.write(data);
+		size = data.count();
+		writeToSocket(&peer, (char*)&size, sizeof(int));
+		writeToSocket(&peer, data.data(), size);
 	}
 	else
 	{
 		size = 0;
-		peer.write((char*)&size, sizeof(int));
+		writeToSocket(&peer, (char*)&size, sizeof(int));
 	}
 	peer.waitForReadyRead(3000);
 }
