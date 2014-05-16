@@ -2,6 +2,7 @@
 
 #include "FileTree.h"
 #include <unordered_map>
+#include <tuple>
 
 class ShareFileSystem
 {
@@ -21,7 +22,8 @@ public:
     void saveToFile(const QString &fileName);
     QByteArray toByteArray();
 
-    std::list<std::pair<int, QString>> searchInFiles(const QString &searchString);
+    std::list<std::tuple<int, int, QString>> searchInFiles(const QString &searchString);
+    //un tuplu inseamna id - size - nume
 
     QString getFileFromId(int id);
 private:

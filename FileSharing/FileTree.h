@@ -69,6 +69,7 @@ public:
 	int addFile(const QString &realPath, const QString &fullPath="");
 	void addDirectory(const QString &dirName, const QString &fullPath="");
     void removeTree();
+    void searchAfterName(const QString &name, std::list<std::tuple<int, int, QString>> &results);
 
     QJsonObject toJson();
 

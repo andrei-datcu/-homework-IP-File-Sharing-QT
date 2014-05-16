@@ -31,7 +31,8 @@ FileTree* ShareFileSystem::getRoot(){
 void ShareFileSystem::addFile(const QString &realFullPath, FileTree *directory){
 
     int id = directory->addFile(realFullPath);
-    fileIds[id] = realFullPath;
+    QFileInfo fi(realFullPath);
+    fileIds[id] = std::make_pair(realFullPath, fi.fileName());
 }
 
 void ShareFileSystem::removeTree(FileTree *t){
@@ -124,12 +125,10 @@ QString ShareFileSystem::getFileFromId(int id){
     return fileIds[id];
 }
 
-std::list<std::pair<int, QString>> ShareFileSystem::searchInFiles(const QString &searchString){
+std::list<std::tuple<int, int, QString>> ShareFileSystem::searchInFiles(const QString &searchString){
 
-    std::list<std::pair<int, QString>> result;
-    for (auto item : fileIds)
-        if (item.second.contains(searchString))
-            result.push_back(item);
+    std::list<std::tuple<int, int, QString>> result;
+    root->searchAfterName(searchString, result);
 
     return result;
 }

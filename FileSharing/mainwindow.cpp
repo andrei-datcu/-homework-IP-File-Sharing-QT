@@ -27,16 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         if (ok && !text.isEmpty()){
             Peer *user = new Peer("bla", text);
-            activePeers.push_back(user);
-            QProgressDialog *pd = new QProgressDialog(this);
-            pd->setRange(0, 0);
-            pd->setLabelText("Waiting for user's response...");
-
-            RequestThreadClient *rtc =  user->getFileList();           
-            connect(rtc, SIGNAL(finished()), pd, SLOT(close()));
-            pd->exec();
-            tabWidget->addTab(new DownloadWidget(*user, progresswidget, this), user->username);
-
+            addPeer(user);
         }
     });
 	menu->addAction(a);
@@ -85,15 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(a4, &QAction::triggered, [this](){
         uDialog->exec();
         if (uDialog->result() == QDialog::Accepted){
-            activePeers.push_back(uDialog->selectedPeer);
-            QProgressDialog *pd = new QProgressDialog(this);
-            pd->setRange(0, 0);
-            pd->setLabelText("Waiting for user's response...");
-
-            RequestThreadClient *rtc =  uDialog->selectedPeer->getFileList();           
-            connect(rtc, SIGNAL(finished()), pd, SLOT(close()));
-            pd->exec();
-            tabWidget->addTab(new DownloadWidget(*uDialog->selectedPeer, progresswidget, this), uDialog->selectedPeer->username);
+            addPeer(uDialog->selectedPeer);
         }
     });
 
@@ -139,4 +122,19 @@ MainWindow::~MainWindow(){
     if (myUser.usernameOk){
         myUser.disconnectFromServer()->wait();
     }
+}
+
+
+void MainWindow::addPeer(Peer *user){
+
+    QProgressDialog *pd = new QProgressDialog(this);
+    pd->setRange(0, 0);
+    pd->setLabelText("Waiting for user's response...");
+
+    RequestThreadClient *rtc =  user->getFileList();           
+    connect(rtc, SIGNAL(finished()), pd, SLOT(accept()));
+    if (pd->exec() != QDialog::Accepted)
+        return;
+    tabWidget->addTab(new DownloadWidget(*user, progresswidget, this), user->username);
+    activePeers.push_back(user);
 }

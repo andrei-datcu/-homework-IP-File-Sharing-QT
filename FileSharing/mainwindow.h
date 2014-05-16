@@ -20,6 +20,8 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    public slots:
+        void addPeer(Peer *p);
 
 private:
     

@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <qjsonarray.h>
+#include <tuple>
 
 const QString FileTree::delim = "/";
 int FileInfo::total = 0;
@@ -140,3 +141,13 @@ FileTree::FileTree(const QJsonObject &json, FileTree *parent):
     for (const QJsonValue &v : cJson)
         this->addChild(new FileTree(v.toObject(), this));
 }
+
+ void FileTree::searchAfterName(const QString &name, 
+                            std::list<std::tuple<int, int, QString>> &results){
+
+    if (finfo.name.contains(name))
+        results.push_back(std::make_tuple(finfo.index, finfo.size, finfo.name));
+
+    for (FileTree *c : children)
+        c->searchAfterName(name, results);
+ }
