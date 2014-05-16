@@ -19,7 +19,7 @@ public:
     ~DownloadWidget();
 
 private:
-    
+
     Peer &peer;
     ShareDriveView *peerview;
     FileExplorerView *localview;

@@ -21,6 +21,9 @@ public:
 private:
     std::map<ClientFileThread*, int> workingThreads;
     QMutex removeMutex;
+
+    private slots:
+        void showDisconnectError(const QString &path);
 };
 
 #endif // DOWNLOADSPOGRESSWIDGET_H

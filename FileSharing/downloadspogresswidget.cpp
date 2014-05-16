@@ -1,5 +1,6 @@
 #include "downloadspogresswidget.h"
 #include <qprogressbar.h>
+#include <qmessagebox.h>
 
 DownloadsPogressWidget::DownloadsPogressWidget(QWidget *parent)
     : QTableWidget(0, 2, parent){
@@ -29,6 +30,7 @@ void DownloadsPogressWidget::addFileProgressTrack (const QString &fileName,
     setCellWidget(this->rowCount() - 1, 1, pb);
 
     connect(dThread, SIGNAL(gotBytes(int)), pb, SLOT(setValue(int)));
+    connect(dThread, SIGNAL(ClientFileThread::connectionFailed(const QString&)), this, SLOT(showDisconnectError(const QString&)), Qt::BlockingQueuedConnection);
     connect(dThread, &ClientFileThread::finished, [this](){
         removeMutex.lock();
         ClientFileThread *sender = (ClientFileThread*) QObject::sender();
@@ -42,4 +44,9 @@ void DownloadsPogressWidget::addFileProgressTrack (const QString &fileName,
 DownloadsPogressWidget::~DownloadsPogressWidget()
 {
 
+}
+
+void DownloadsPogressWidget::showDisconnectError(const QString &path){
+
+     QMessageBox::critical(NULL, "Error", "Connection failed! File " + path + " could not be downloaded. Probably user exited");
 }

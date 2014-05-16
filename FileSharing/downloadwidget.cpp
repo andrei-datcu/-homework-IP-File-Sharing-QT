@@ -47,9 +47,6 @@ DownloadWidget::DownloadWidget(Peer &peer, DownloadsPogressWidget *progressWidge
                     return;
                 }
                 ClientFileThread *dwnthread = this->peer.getFile(item->finfo.index, savePath);
-                connect(dwnthread, &ClientFileThread::connectionFailed, [this](const QString& fn){
-                    QMessageBox::critical(NULL, "Error", "Connection failed! File " + fn + " could not be downloaded. Probably user exited");
-                });
                 this->progressWidget->addFileProgressTrack(item->finfo.name, item->finfo.size, dwnthread);
             }
     });
