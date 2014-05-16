@@ -116,6 +116,16 @@ MainWindow::MainWindow(QWidget *parent)
     progresswidget = new DownloadsPogressWidget(this);
     tabWidget = new QTabWidget(this);
     tabWidget->setMinimumHeight(300);
+    tabWidget->setTabsClosable(true);
+
+    connect(tabWidget, &QTabWidget::tabCloseRequested, [this](const int &index){
+        if (QMessageBox::question(this, "Confirmation", "Are you sure?", 
+                     QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+            return; //user clicked no
+
+        activePeers.erase(activePeers.begin() + index);
+        tabWidget->removeTab(index);
+    });
 
     QSplitter *qsp = new QSplitter(this);
     qsp->setOrientation(Qt::Vertical);

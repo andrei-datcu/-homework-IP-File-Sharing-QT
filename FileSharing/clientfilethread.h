@@ -18,13 +18,13 @@ public:
 	void downloadFile();
 
 	public slots:
-		//void readyRead();
 		void connected();
 		void disconnected();
 		void bytesWritten(qint64 bytes);
 
 signals:
 		void gotBytes(int bytesNumber);
+        void connectionFailed(const QString&);
 
 private:
 	QString ipAddress, downloadPath;
