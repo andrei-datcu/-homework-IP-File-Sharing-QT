@@ -66,6 +66,7 @@ void RequestThreadClient::readyRead()
     // TODO!! Pune-l in whileee!!
 	//peer->read(buff, peer->bytesAvailable());
 	//TODO: CITESTE INT IN WHILE
+
 	peer->read(buffer, sizeof(int)); 
 	memcpy(&size, buffer, sizeof(int));
 	qDebug() << "Clientttt" << size;
