@@ -1,4 +1,5 @@
 #include "requestthreadclient.h"
+#include "util_serializer.h"
 
 
 RequestThreadClient::RequestThreadClient(QObject *parent)
@@ -38,7 +39,7 @@ void RequestThreadClient::getFileList()
 	int written = 0;
 	while (sizeToWrite > 0)
 	{
-		written = peer->write(filelist);
+		written = peer->write(filelist.data() + written);
 		sizeToWrite -= written;
 	}
 }
@@ -61,23 +62,14 @@ void RequestThreadClient::doConnect()
 void RequestThreadClient::readyRead()
 {
 	char buffer[5000];
-    QByteArray buff, content;
 	int size;
-    // TODO!! Pune-l in whileee!!
-	//peer->read(buff, peer->bytesAvailable());
-	//TODO: CITESTE INT IN WHILE
 
-	peer->read(buffer, sizeof(int)); 
+	readFromSocket(peer, buffer, sizeof(int));
 	memcpy(&size, buffer, sizeof(int));
-	qDebug() << "Clientttt" << size;
-	while (size > 0)
-	{
-		buff = peer->readAll();
-		content += buff;
-		size -= buff.size();
-	}
+
+	readFromSocket(peer, buffer, size);
+	QByteArray content(buffer, size);
     *share = new ShareFileSystem(content);
-	qDebug() << "Client" << buff;
 }
 
 void RequestThreadClient::disconnected()

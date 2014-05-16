@@ -1,6 +1,7 @@
 #include "requestthread.h"
 #include "utils.h"
 #include <windows.h>
+#include "util_serializer.h"
 
 
 #include <QTcpSocket>
@@ -29,11 +30,12 @@ void RequestThread::run()
         else
             qDebug("Read from client");
 	
-	peer.read(buffer, peer.bytesAvailable());
-	size = sizeof(share.toByteArray());
+	readFromSocket(&peer, buffer, MAGICNUMBER);
+	size = share.toByteArray().count();
 	qDebug()<<buffer << size;
-	peer.write((char *)&size, sizeof(int));
-	peer.write(share.toByteArray());
+	writeToSocket(&peer, (char*)&size, sizeof(int)); 
+	writeToSocket(&peer, share.toByteArray().data(), size); 
+
 	peer.waitForDisconnected(3000);
 }
 

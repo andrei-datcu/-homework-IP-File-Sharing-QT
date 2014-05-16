@@ -31,3 +31,33 @@ QMap<QString, QString> fromByteArray(const QByteArray &bytes)
 	return result;
 	
 }
+
+bool readFromSocket(QTcpSocket *socket, char*buffer, int byteCount)
+{
+	int bytesRead = 0;
+	while (byteCount > 0)
+	{
+		bytesRead = socket->read(buffer, byteCount);
+		if (bytesRead == -1)
+			return false;
+		buffer += bytesRead;
+		byteCount -= bytesRead;
+	}
+
+	return true;
+}
+
+bool writeToSocket(QTcpSocket *socket, char *buffer, int byteCount)
+{
+	int bytesWritten = 0;
+	while (byteCount > 0)
+	{
+		bytesWritten = socket->write(buffer, byteCount);
+		if (bytesWritten == -1)
+			return false;
+		buffer += bytesWritten;
+		byteCount -= bytesWritten;
+	}
+
+	return true;
+}
