@@ -55,7 +55,8 @@ void ClientFileThread::doConnect()
 
 void ClientFileThread::downloadFile()
 {
-	char buffer[9000];
+    const int bufsize = 10000;
+	char buffer[bufsize];
 	int fileSize = 0;
 	int received = 0;
 	int sum_received = 0;
@@ -66,7 +67,6 @@ void ClientFileThread::downloadFile()
         emit connectionFailed("");
     }
 
-	//peer->read(buffer, sizeof(fileRequest));
 	readFromSocket(peer, buffer, sizeof(fileRequest));
 	memcpy(&new_request, buffer, sizeof(fileRequest));
 	qDebug() << "Client"<<new_request.size << " "  << new_request.payload;
@@ -77,17 +77,20 @@ void ClientFileThread::downloadFile()
 	qDebug()<<fileSize;
 	while(fileSize > 0)
 	{
-        if (peer->state() != QAbstractSocket::ConnectedState){
+
+        received = peer->read(buffer, bufsize);
+        if (received == -1){
             file.close();
             QFile::remove(downloadPath);
             emit connectionFailed(downloadPath);
             return;
         }
-        data = peer->readAll();
-		received = data.count();
+
+        qDebug() << received << "\n";
+ 
 		sum_received += received;
 		emit gotBytes(sum_received);
-		file.write(data);
+		file.write(buffer, received);
 		fileSize -= received;
 	}
 
