@@ -9,6 +9,7 @@
 #include "requestthreadclient.h"
 #include <qsplitter.h>
 #include <qmessagebox.h>
+#include <qheaderview.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), myUser(""), searchTabPos(-1){
@@ -153,6 +154,7 @@ MainWindow::MainWindow(QWidget *parent)
     searchFileAction->setEnabled(false);
     searchUsersAction->setEnabled(false);
     setMinimumWidth(600);
+    progresswidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 MainWindow::~MainWindow(){
