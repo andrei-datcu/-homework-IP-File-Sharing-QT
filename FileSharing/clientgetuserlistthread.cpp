@@ -31,17 +31,13 @@ void ClientGetUserListThread::run()
         else
             qDebug("Read from client");
 	
-	peer.read(buffer, sizeof(int));
+	readFromSocket(&peer, buffer, sizeof(int));
 	memcpy(&size, buffer, sizeof(int));
 
 	if (size != 0)
 	{
-		while (size > 0)
-		{
-			buff = peer.readAll();
-			data += buff;
-			size -= buff.size();
-		}
+		readFromSocket(&peer, buffer, size);
+		QByteArray data(buffer, size);
 		userList = fromByteArray(data);
 		
 	}

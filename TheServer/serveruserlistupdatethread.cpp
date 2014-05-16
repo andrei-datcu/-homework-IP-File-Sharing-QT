@@ -29,8 +29,8 @@ void ServerUserlistUpdateThread::run()
 			QByteArray transfer = toByteArray(userList);
 			int size = transfer.count();
 
-			peer->write((char *)&size, sizeof(int));
-			peer->write(transfer);
+			writeToSocket(peer, (char*)&size, sizeof(int));
+			writeToSocket(peer, transfer.data(), size);
 
 			peer->waitForBytesWritten(5000);
 			peer->close();
