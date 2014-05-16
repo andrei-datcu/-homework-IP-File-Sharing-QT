@@ -24,8 +24,8 @@ void ServerFileThread::run()
 
 	QTcpSocket peer;
 	peer.setSocketDescriptor(socketDescriptor);
-	peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
-	connect(&peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
+	//peer.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+	//connect(&peer, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 
 	if (!peer.waitForReadyRead(6000))
             qDebug("Failed to receive message from client") ;
