@@ -7,6 +7,7 @@
 #include "clientdisconnectserverthread.h"
 #include "clientgetuserlistserver.h"
 #include "clientrespondtosearchserver.h"
+#include "clientsearchthread.h"
 
 
 #include <QObject>
@@ -30,7 +31,7 @@ public:
 
 	ClientConnectServerThread* connectToServer(QString ipAddress, int portNumber = SERVERPORT);
 	ClientDisconnectServerThread* disconnectFromServer();
-	void searchFile(QString searchName);
+	ClientSearchThread* searchFile(QString searchName);
 	~User();
 
     ShareFileSystem *shared;
