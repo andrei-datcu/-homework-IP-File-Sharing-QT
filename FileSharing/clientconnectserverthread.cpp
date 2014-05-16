@@ -49,29 +49,27 @@ void ClientConnectServerThread::loginToServer()
 	strncpy(new_client.userName, username.toLatin1(), strlen(username.toLatin1()));
 	qDebug() << "[CLIENT] " << new_client.userName << " is trying to log in!";
 	memcpy(buffer, &new_client, sizeof(connectRequest));
-	peer->write(buffer, sizeof(connectRequest));
+	writeToSocket(peer, buffer, sizeof(connectRequest));
+	//peer->write(buffer, sizeof(connectRequest));
 }
 
 void ClientConnectServerThread::getUserList()
 {
 	char buffer[4000];
-	QByteArray data, buff;
 	QMap<QString, QString> userList;
 	serverConnectResponse new_response;
-	int size;
+	int size, copyOfSize;
 	User *the_user = (User *) user;
 
-	peer->read(buffer, sizeof(int));
+	readFromSocket(peer, buffer, sizeof(int));
 	memcpy(&size, buffer, sizeof(int));
 	if (size != 0)
 	{
 		qDebug() << "Clientttt" << size;
-		while (size > 0)
-		{
-			buff = peer->readAll();
-			data += buff;
-			size -= buff.size();
-		}
+		copyOfSize = size;
+		readFromSocket(peer, buffer, size);
+
+		QByteArray data(buffer, copyOfSize);
 		userList = fromByteArray(data);
 		qDebug() << "Clientttt" << userList;
 		

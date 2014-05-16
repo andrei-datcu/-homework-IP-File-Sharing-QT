@@ -33,7 +33,7 @@ void ServerConnectionThread::run()
     else
         qDebug("[SERVER] Reading username from client");
 
-	peer.read(buffer, sizeof(connectRequest));
+	readFromSocket(&peer, buffer, sizeof(connectRequest));
 	memcpy(&new_client, buffer, sizeof(connectRequest));
 	
 
@@ -50,8 +50,8 @@ void ServerConnectionThread::run()
 		((Server*)server)->connectedClients++;
 		lock->unlock();
 
-		peer.write((char *)&size, sizeof(int));
-		peer.write(transfer);
+		writeToSocket(&peer, (char*)&size, sizeof(int));
+		writeToSocket(&peer, transfer.data(), transfer.count());
 
 		ServerUserlistUpdateThread *thread = new ServerUserlistUpdateThread(0, srv->userList, new_client.userName);
 		connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
@@ -61,7 +61,7 @@ void ServerConnectionThread::run()
 		qDebug() << "[SERVER] Username-ul este deja folosit!";
 		new_response.valid = 0;
 		memcpy(buffer, &new_response, sizeof(serverConnectResponse));
-		peer.write(buffer, sizeof(serverConnectResponse));
+		writeToSocket(&peer, buffer, sizeof(serverConnectResponse));
 	}
 
 	peer.waitForReadyRead(3000);
