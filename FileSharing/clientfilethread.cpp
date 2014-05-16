@@ -1,5 +1,6 @@
 #include "clientfilethread.h"
 #include "utils.h"
+#include "util_serializer.h"
 
 #define FAKECHUNKSIZE 5000
 
@@ -35,7 +36,8 @@ void ClientFileThread::getFile()
 	new_request.fileID=fileID;
 	memcpy(buffer, &new_request, sizeof(fileRequest));
 
-	peer->write(buffer, sizeof(fileRequest));
+	writeToSocket(peer, buffer, sizeof(fileRequest));
+	//peer->write(buffer, sizeof(fileRequest));
 }
 
 void ClientFileThread::doConnect()
@@ -64,7 +66,8 @@ void ClientFileThread::downloadFile()
         emit connectionFailed("");
     }
 
-	peer->read(buffer, sizeof(fileRequest));
+	//peer->read(buffer, sizeof(fileRequest));
+	readFromSocket(peer, buffer, sizeof(fileRequest));
 	memcpy(&new_request, buffer, sizeof(fileRequest));
 	qDebug() << "Client"<<new_request.size << " "  << new_request.payload;
 	

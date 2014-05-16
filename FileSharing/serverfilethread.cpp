@@ -1,5 +1,6 @@
 #include "serverfilethread.h"
 #include "utils.h"
+#include "util_serializer.h"
 
 
 ServerFileThread::ServerFileThread(QObject *parent, int socketDescriptor, ShareFileSystem &share)
@@ -31,9 +32,10 @@ void ServerFileThread::run()
         else
             qDebug("Read from client");
 	
-	peer.read(buffer, sizeof(fileRequest));
+	readFromSocket(&peer, buffer,sizeof(fileRequest));
+	//peer.read(buffer, sizeof(fileRequest));
 	memcpy(&new_request, buffer, sizeof(fileRequest));
-	qDebug()<< "Staaan:"<<new_request.fileID << share.getFileFromId(new_request.fileID);
+	//qDebug()<< "Staaan:"<<new_request.fileID << share.getFileFromId(new_request.fileID);
 	//TODO get filepath from ShareFileSystem
 
 	QFile file(share.getFileFromId(new_request.fileID));
@@ -50,11 +52,14 @@ void ServerFileThread::run()
 	filename = file.fileName().toLatin1();
 	strncpy(new_request.payload, filename.data(), strlen(filename.data()));
 	memcpy(buffer, &new_request, sizeof(fileRequest));
-	peer.write(buffer, sizeof(fileRequest));
+	writeToSocket(&peer, buffer, sizeof(fileRequest));
+	//peer.write(buffer, sizeof(fileRequest));
 
 
 	qDebug()<<"Data: "<<data.size() <<"  " <<new_request.payload;
-	peer.write(data);
+	
+	writeToSocket(&peer, data.data(), data.count());
+	//peer.write(data);
 
 	peer.disconnectFromHost();
 	peer.waitForDisconnected();
