@@ -92,9 +92,10 @@ void User::test_slot()
 }
 
 
-void User::searchFile(QString searchName)
+ClientSearchThread* User::searchFile(QString searchName)
 {
 	ClientSearchThread *thread = new ClientSearchThread(this, searchName);
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 	thread->start();
+	return thread;
 }

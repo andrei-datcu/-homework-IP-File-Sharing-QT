@@ -23,7 +23,7 @@ void ClientRespondToSearchThread::run()
 	char buffer[100];
 	QByteArray buff, data;
 	QTcpSocket peer;
-	QMap<QString, QString> result;
+	std::list<std::tuple<int, int, QString>> result;
 
 	User *the_user = (User*) user;
 	
@@ -50,15 +50,12 @@ void ClientRespondToSearchThread::run()
 
 
 	qDebug() << data;
-	//qDebug() << the_user->shared->toByteArray();
+	int tuple_size, tuple_fileID;
+	QString tuple_filename;
 	auto lista = the_user->shared->searchInFiles(QString(data));
-	for (auto item: lista)
-	{
-		qDebug()<< item.first << item.second;
-		result[QString::number(item.first)] = item.second;
-	}
-	data = toByteArray(result);
-	if (result.size() > 0)
+	data = searchResultsToByteArray(lista);
+	
+	if (lista.size() > 0)
 	{
 		size = sizeof(data);
 		peer.write((char*)&size, sizeof(int));

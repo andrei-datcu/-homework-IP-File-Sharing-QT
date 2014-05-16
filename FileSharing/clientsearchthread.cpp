@@ -45,7 +45,7 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 	int new_size;
 	char buffer[100];
 	QByteArray recvData, buff;
-	QMap<QString, QString> oneResult;
+	std::list<std::tuple<int, int, QString>> oneResult;
 
 
 	peer->write((char *)&size, sizeof(int));
@@ -55,6 +55,8 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 
 	peer->read(buffer, sizeof(int));
 	memcpy(&new_size, buffer, sizeof(int));
+	qDebug()<<"Got something for you"<<new_size;
+
 	if (new_size != 0)
 	{
 		while (new_size > 0)
@@ -64,17 +66,17 @@ void ClientSearchThread::doTheSearch(QString peerUserName)
 			new_size -= buff.size();
 		}
 
-		oneResult = fromByteArray(recvData);
+		oneResult = searchResultsFromByteArray(recvData);
 		if (oneResult.size() > 0)
 		{
-			qDebug()<<"Got something for you";
-			QMap<QString, QString>::iterator i;
-			for (i=oneResult.begin(); i!= oneResult.end(); ++i)
+			std::list<std::tuple<int, int, QString>>::iterator i;
+			int tuple_size, tuple_fileid;
+			QString tuple_filename; 
+			for (auto item: oneResult)
 			{
-				std::tuple<QString, int, QString> new_tuplu(peerUserName, i.key().toInt(), i.value());
-				results.push_back(new_tuplu);
+				std::tie(tuple_fileid, tuple_size, tuple_filename) = item;
+				results.push_back(std::make_tuple(peerUserName, tuple_fileid, tuple_size, tuple_filename));
 			}
-
 			User *the_user = (User*) user;
 			the_user->searchResult = results;
 			emit the_user->gotSearchResults();

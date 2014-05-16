@@ -31,8 +31,7 @@ FileTree* ShareFileSystem::getRoot(){
 void ShareFileSystem::addFile(const QString &realFullPath, FileTree *directory){
 
     int id = directory->addFile(realFullPath);
-    QFileInfo fi(realFullPath);
-    fileIds[id] = std::make_pair(realFullPath, fi.fileName());
+    fileIds[id] = realFullPath;
 }
 
 void ShareFileSystem::removeTree(FileTree *t){
