@@ -30,7 +30,7 @@ void DownloadsPogressWidget::addFileProgressTrack (const QString &fileName,
     setCellWidget(this->rowCount() - 1, 1, pb);
 
     connect(dThread, SIGNAL(gotBytes(int)), pb, SLOT(setValue(int)));
-    connect(dThread, SIGNAL(ClientFileThread::connectionFailed(const QString&)), this, SLOT(showDisconnectError(const QString&)), Qt::BlockingQueuedConnection);
+    connect(dThread, SIGNAL(connectionFailed(const QString&)), this, SLOT(showDisconnectError(const QString&)), Qt::BlockingQueuedConnection);
     connect(dThread, &ClientFileThread::finished, [this](){
         removeMutex.lock();
         ClientFileThread *sender = (ClientFileThread*) QObject::sender();

@@ -34,7 +34,8 @@ private:
 
     UsersDialog *uDialog;
     SearchFileWidget *searchWidget;
-    QAction *connectToServerAction, *editDriveAction;
+    QAction *connectToServerAction, *editDriveAction, *setUsernameAction,
+            *searchFileAction, *searchUsersAction;
 
     int searchTabPos;
 };

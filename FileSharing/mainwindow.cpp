@@ -66,6 +66,10 @@ MainWindow::MainWindow(QWidget *parent)
                 QMessageBox::critical(0,"Error","Username already taken. Please choose another one!");
             else{
                 QMessageBox::information(0,"Ok","Connection successful");
+                searchFileAction->setEnabled(true);
+                searchUsersAction->setEnabled(true);
+                editDriveAction->setEnabled(false);
+                setUsernameAction->setEnabled(false);
                 uDialog->populateList();
             }
                    
@@ -77,18 +81,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&myUser, SIGNAL(gotNewUserList()), uDialog, SLOT(populateList())); 
 
-    QAction *a4 = new QAction("Search users...", this);
-    servermenu->addAction(a4);
-    connect(a4, &QAction::triggered, [this](){
+    searchUsersAction = new QAction("Search users...", this);
+    servermenu->addAction(searchUsersAction);
+    connect(searchUsersAction, &QAction::triggered, [this](){
         uDialog->exec();
         if (uDialog->result() == QDialog::Accepted){
             addPeer(uDialog->selectedPeer);
         }
     });
 
-    QAction *a5 = new QAction("Set username", this);
-    servermenu->addAction(a5);
-    connect(a5, &QAction::triggered, [this](){
+    setUsernameAction = new QAction("Set username", this);
+    servermenu->addAction(setUsernameAction);
+    connect(setUsernameAction, &QAction::triggered, [this](){
         bool ok;
         QString text = QInputDialog::getText(this, "Set your username...",
                                           "Username:", QLineEdit::Normal,
@@ -103,9 +107,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    QAction *a6 = new QAction("Search file...", this);
-    servermenu->addAction(a6);
-    connect(a6, &QAction::triggered, [this](){
+    searchFileAction = new QAction("Search file...", this);
+    servermenu->addAction(searchFileAction);
+    connect(searchFileAction, &QAction::triggered, [this](){
         if (searchTabPos != -1)
             tabWidget->setCurrentIndex(searchTabPos);
         else{
@@ -145,6 +149,9 @@ MainWindow::MainWindow(QWidget *parent)
     qsp->addWidget(tabWidget);
     qsp->addWidget(progresswidget);
     setCentralWidget(qsp);
+
+    searchFileAction->setEnabled(false);
+    searchUsersAction->setEnabled(false);
 }
 
 MainWindow::~MainWindow(){

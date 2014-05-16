@@ -34,7 +34,11 @@ SearchFileWidget::SearchFileWidget(User &u, DownloadsPogressWidget *pw, QWidget 
         if (pd->exec() != QDialog::Accepted)
             return;
 
-        resultListWidget->clearContents();
+       // resultListWidget->clearContents();
+
+        int rc = resultListWidget->rowCount();
+        for (int i = 0; i < rc; ++i)
+            resultListWidget->removeRow(0);
 
         for (auto sRes : myUser.searchResult){
 
