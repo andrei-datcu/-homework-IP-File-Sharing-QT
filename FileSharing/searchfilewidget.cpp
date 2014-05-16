@@ -99,9 +99,6 @@ SearchFileWidget::SearchFileWidget(User &u, DownloadsPogressWidget *pw, QWidget 
         }
 
         ClientFileThread *dwnthread = p->getFile(fileId, savePath);
-        connect(dwnthread, &ClientFileThread::connectionFailed, [this](const QString& fn){
-               QMessageBox::critical(this, "Error", "Connection failed! File " + fn + " could not be downloaded. Probably user exited");
-        });
         progressWidget->addFileProgressTrack(fileName, fileSize, dwnthread);
     });
 

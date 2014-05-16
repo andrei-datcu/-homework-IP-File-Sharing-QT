@@ -152,6 +152,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     searchFileAction->setEnabled(false);
     searchUsersAction->setEnabled(false);
+    setMinimumWidth(600);
 }
 
 MainWindow::~MainWindow(){

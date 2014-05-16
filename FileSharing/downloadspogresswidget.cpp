@@ -8,7 +8,7 @@ DownloadsPogressWidget::DownloadsPogressWidget(QWidget *parent)
     QStringList tableHeaders;
 
     tableHeaders.append("File name");
-    tableHeaders.append("Donwload progress");
+    tableHeaders.append("Download progress");
     setHorizontalHeaderLabels(tableHeaders);
     setMinimumHeight(200);
 }
