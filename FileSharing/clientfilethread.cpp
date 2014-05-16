@@ -55,7 +55,7 @@ void ClientFileThread::doConnect()
 
 void ClientFileThread::downloadFile()
 {
-    const int bufsize = 10000;
+    const int bufsize = 100000;
 	char buffer[bufsize];
 	int fileSize = 0;
 	int received = 0;

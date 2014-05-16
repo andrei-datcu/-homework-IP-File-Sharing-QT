@@ -54,17 +54,8 @@ void ServerFileThread::run()
 	memcpy(buffer, &new_request, sizeof(fileRequest));
 	writeToSocket(&peer, buffer, sizeof(fileRequest));
 
-
 	qDebug()<<"Data: "<<data.size() <<"  " <<new_request.payload;
-	const int buffsize = 10000;
-    char *buff = data.data();
-	for (int c = data.count(); c > 0;){
-        int written = peer.write(buff, std::min(buffsize, c));
-        if (written == -1)
-            break;
-        c -= written;
-        buff += written;
-    }
+	writeToSocket(&peer, data.data(), data.size());
 
 	peer.disconnectFromHost();
 	peer.waitForDisconnected();
