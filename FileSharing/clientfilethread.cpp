@@ -55,7 +55,7 @@ void ClientFileThread::doConnect()
 
 void ClientFileThread::downloadFile()
 {
-    const int bufsize = 100000;
+    const int bufsize = 8000;
 	char buffer[bufsize];
 	int fileSize = 0;
 	int received = 0;
@@ -78,7 +78,7 @@ void ClientFileThread::downloadFile()
 	while(fileSize > 0)
 	{
 
-        received = peer->read(buffer, bufsize);
+        received = peer->read(buffer, std::min(bufsize, fileSize));
         if (received == -1){
             file.close();
             QFile::remove(downloadPath);

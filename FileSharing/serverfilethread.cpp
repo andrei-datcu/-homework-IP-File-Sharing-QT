@@ -57,6 +57,19 @@ void ServerFileThread::run()
 	qDebug()<<"Data: "<<data.size() <<"  " <<new_request.payload;
 	writeToSocket(&peer, data.data(), data.size());
 
+    int bytesRemainig = data.size();
+    const int chunk = 8000;
+    char *bf = data.data();
+    while (bytesRemainig > 0){
+        int bytesWritten = peer.write(bf, std::min(bytesRemainig, chunk));
+        if (bytesWritten == -1){
+            qDebug() << "Wtffffffffffffffffff" << "\n";
+            break;
+        }
+        bf += bytesWritten;
+        bytesRemainig -= bytesWritten;
+    }
+
 	peer.disconnectFromHost();
 	peer.waitForDisconnected();
 }
